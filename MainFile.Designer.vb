@@ -23,7 +23,7 @@ Partial Class AwardGenerator
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AwardGenerator))
-        Me.Csv_OpenDialog = New System.Windows.Forms.OpenFileDialog()
+        Me.OpenAsPrompt = New System.Windows.Forms.OpenFileDialog()
         Me.CSV_Ex_Trophy = New System.Windows.Forms.SaveFileDialog()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -59,10 +59,9 @@ Partial Class AwardGenerator
         Me.TabControl1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Csv_OpenDialog
+        'OpenAsPrompt
         '
-        Me.Csv_OpenDialog.FileName = "Open File..."
-        Me.Csv_OpenDialog.Filter = "CSV|*.csv"
+        Me.OpenAsPrompt.Filter = "TXT|*.txt|CSV|*.csv"
         '
         'CSV_Ex_Trophy
         '
@@ -313,7 +312,7 @@ Partial Class AwardGenerator
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents Csv_OpenDialog As OpenFileDialog
+    Friend WithEvents OpenAsPrompt As OpenFileDialog
     Friend WithEvents CSV_Ex_Trophy As SaveFileDialog
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents FileToolStripMenuItem As ToolStripMenuItem

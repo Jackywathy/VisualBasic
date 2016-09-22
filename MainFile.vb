@@ -113,7 +113,7 @@ Public Class AwardGenerator
         End Try
     End Sub
     ' Read As CSV
-    Public Sub ParseCsv(ResourcePath As String)
+    Private Sub ParseCsv(ResourcePath As String)
         Dim WrongLineNumber As New ArrayList
         'Dim WrongLineText As New ArrayList
         Dim WrongLineReason As New ArrayList
@@ -184,29 +184,24 @@ Public Class AwardGenerator
             End Try
         Else
             MessageBox.Show("The File Can no longer be found?!")
-
         End If
-
     End Sub
+
     ' WRAPS ParseCsv, Error checking
-    Private Sub ImportCSV()
-        Dim GetText As String = CSV_PATH.Text
-        If GetText = String.Empty Then
-            MessageBox.Show("Please Enter A PATH or use Browse.", "Empty Path", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Return
+    Public Sub ImportCSV(CsvPath As String)
+        If CsvPath.StartsWith("~") Then
+            CsvPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & CsvPath.Remove(0, 1)
         End If
-        If GetText.StartsWith("~") Then
-            GetText = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & GetText.Remove(0, 1)
-        End If
-        If Not My.Computer.FileSystem.FileExists(GetText) Then
+        If Not My.Computer.FileSystem.FileExists(CsvPath) Then
             MessageBox.Show("Path not found! Please double check value in text box", "Invalid Path", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Exit Sub
         End If
         ' Passed all tests!
-        ParseCsv(GetText)
+        ParseCsv(CsvPath)
     End Sub
 
 
-
+    ' Write As Txt
     Public Sub ExportTxt(outPath As String)
         Using txtwriter As New StreamWriter(outPath)
             txtwriter.WriteLine("{CSV}")
@@ -218,14 +213,55 @@ Public Class AwardGenerator
             Next
         End Using
     End Sub
+    ' Read As TXT
+    Private Sub ParseTxt(ResourcePath As String)
+        Dim CurrentIdentity As String = String.Empty
+        Dim Splitted As String()
+        For Each Line As String In File.ReadLines(ResourcePath)
+            If Line.StartsWith("{CSV}") Then
+                CurrentIdentity = "CSV"
+            ElseIf Line.StartsWith("{TROPHY_LIMITER}") Then
+                CurrentIdentity = "T_LIMIT"
+            ElseIf Line.StartsWith("{PLAQUE_LIMITER}") Then
+                CurrentIdentity = "P_LIMIT"
+            Else
+                Select Case (CurrentIdentity)
+                    Case "P_LIMIT"
+                        PLAQUE_LIMITER.Add(Line)
+                    Case "T_LIMIT"
+                        TROPHY_LIMITER.Add(Line)
+                    Case "CSV"
+                        Splitted = Line.Split("|")
+                        If Splitted.Length <> 3 Then
+                            MsgBox("Error" & Line)
+                        Else
+                            DataTable.Rows.Add(Splitted(0), Splitted(1), Splitted(2))
+                        End If
+                End Select
+            End If
 
-    Private Sub BROWSE_TROPHY_Click(sender As Object, e As EventArgs)
-        If Csv_OpenDialog.ShowDialog = DialogResult.OK Then
-            Console.WriteLine(Csv_OpenDialog.FileName)
-            CSV_PATH.Text = Csv_OpenDialog.FileName
-            ImportCSV()
-        End If
+        Next
     End Sub
+
+    ' Wraps ParseTxt, Error checking
+    Public Sub ImportTxt(TxtPath As String)
+        MsgBox(TxtPath & "start")
+        If TxtPath.StartsWith("~") Then
+            TxtPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & TxtPath.Remove(0, 1)
+        End If
+        If Not My.Computer.FileSystem.FileExists(TxtPath) Then
+            MessageBox.Show("Path not found! Please double check value in text box", "Invalid Path", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MsgBox(TxtPath)
+            Exit Sub
+        End If
+        ' Passed all tests!
+
+        ParseTxt(TxtPath)
+    End Sub
+
+
+
+
 
 
 
@@ -268,6 +304,20 @@ Public Class AwardGenerator
     End Sub
 
 
+    Public Sub OpenAsPromptWrapper()
+        If OpenAsPrompt.ShowDialog() = DialogResult.OK Then
+            MsgBox(OpenAsPrompt.FileName)
+            Select Case OpenAsPrompt.FilterIndex
+                ' selected txt
+                Case 1
+                    ImportTxt(OpenAsPrompt.FileName)
+                Case 2
+                    ImportCSV(OpenAsPrompt.FileName)
+                Case Else
+                    MsgBox("? happened")
+            End Select
+        End If
+    End Sub
 
     Private Sub OpenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenToolStripMenuItem.Click
         If DataTable.Rows.Count <> 0 And JustSaved = False Then
@@ -277,15 +327,8 @@ Public Class AwardGenerator
             End If
         End If
         DataTable.Rows.Clear()
+        OpenAsPromptWrapper()
 
-        If Csv_OpenDialog.ShowDialog() = DialogResult.OK Then
-            Try
-                ParseCsv(Csv_OpenDialog.FileName)
-            Catch ex As Exception
-                MsgBox("I dont know what happened >:(" & ex.ToString)
-            End Try
-
-        End If
     End Sub
 
     Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataTable.CellEndEdit
@@ -299,18 +342,15 @@ Public Class AwardGenerator
 
 
 
-    Private Sub Csv_OpenDialog_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Csv_OpenDialog.FileOk
-
-    End Sub
 
     Private Sub OpenToolStripMenuItem1_Click(sender As Object, e As EventArgs)
 
     End Sub
 
     Private Sub AddFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddFileToolStripMenuItem.Click
-        If Csv_OpenDialog.ShowDialog() = DialogResult.OK Then
+        If OpenAsPrompt.ShowDialog() = DialogResult.OK Then
             Try
-                ParseCsv(Csv_OpenDialog.FileName)
+                ParseCsv(OpenAsPrompt.FileName)
             Catch ex As Exception
                 MsgBox("I dont know what happened >:(" & ex.ToString)
             End Try
@@ -413,4 +453,5 @@ Public Class AwardGenerator
                         "File Type: " & SaveType & Environment.NewLine & Environment.NewLine
                         )
     End Sub
+
 End Class

@@ -1,2 +1,9 @@
 {CSV}
-"SCHOOL_TROPHY"|"asdf"|"2016"
+"SCHOOL_TROPHY"|"Wangu Tang"|"2016"
+"SCHOOL_TROPHY"|"Akhil Prasad"|"2016"
+"SCHOOL_TROPHY"|"Sung-Chan Kim"|"2016"
+"SCHOOL_TROPHY"|"Max Koslowski"|"2016"
+"SCHOOL_TROPHY"|"Simon Shields"|"2016"
+"SCHOOL_TROPHY"|"Arthur Chao"|"2016"
+"SCHOOL_TROPHY"|"Preetham Kadappu"|"2016"
+"SCHOOL_TROPHY"|"Fayed Morshedi"|"2016"
