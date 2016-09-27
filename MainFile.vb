@@ -1,82 +1,149 @@
 ﻿Imports System.IO
 Imports System.Reflection
 Public Class AwardGenerator
-    Public TROPHY_LIMITER As ArrayList
-    Public PLAQUE_LIMITER As ArrayList
+    Public TROPHY_LIMITER As List(Of List(Of String))
+    Public PLAQUE_LIMITER As List(Of List(Of String))
     Public EXE_PATH As String
-    Public SaveType As String
+    Public FileType As String
     Public FilePath As String
-    Public Shared OpenNewName As String = "backup.txt"
+    Public Shared OpenNewName As String = "temp.txt"
     Public Shared ConfigFolder As String = ".settings_awards"
-
+    Public Shared PossibleItems As String() = New String(1) {"SCHOOL_TROPHY", "SCHOOL_PLAQUE"}
+    Public Shared DefaultItem As String = "SCHOOL_TROPHY"
     Public JustSaved As Boolean
-
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        DataTable.DataMember = "AwardTable"
-        JustSaved = True
-        UpdateItems()
-        PLAQUE_LIMITER = New ArrayList
-        TROPHY_LIMITER = New ArrayList
-        Create_Hidden(ConfigFolder)
-        Extract_Exe()
-        SaveType = "TXT"
-        FilePath = ""
-    End Sub
-
+    Friend Enum SaveTypes
+        TXT
+        CSV
+    End Enum
+    'Load Helpers & document functions
     Public Sub Create_Hidden(foldername As String)
         If Not Directory.Exists(foldername) Then
             Directory.CreateDirectory(foldername)
         End If
-
         Dim Dinfo As DirectoryInfo = New DirectoryInfo(foldername)
         If ((Dinfo.Attributes & FileAttributes.Hidden)) <> FileAttributes.Hidden Then
             Dinfo.Attributes = Dinfo.Attributes Or FileAttributes.Hidden
         End If
     End Sub
 
-    Public Sub AddRowTable(Award As String, Name As String, Year As String)
-        DataTable.Rows.Add(Award, Name, Year)
+    Private Sub ProgramLoad(sender As Object, e As EventArgs) Handles MyBase.Load
+        DataTable.DataMember = "AwardTable"
+        JustSaved = True
+        UpdateItems()
+        PLAQUE_LIMITER = New List(Of List(Of String))
+        TROPHY_LIMITER = New List(Of List(Of String))
+        Create_Hidden(ConfigFolder)
+        Extract_Exe()
+        FileType = SaveTypes.TXT
+        FilePath = ""
+    End Sub
+
+    Private Sub OnKeyDownForm(ByVal sender As Object, ByVal e As KeyEventArgs) Handles MyBase.KeyDown
+        If (e.Control AndAlso e.Shift AndAlso (e.KeyCode = Keys.S)) Then
+            ' When control and S press ave as
+            SaveAsPromptWrapper()
+        ElseIf (e.Control AndAlso (e.KeyCode = Keys.S)) Then
+            ' control-s = SAVE
+            SaveFilesAbsolute()
+        ElseIf (e.Control AndAlso (e.KeyCode = Keys.E)) Then
+            'control-e = Export
+            ExportAsDXFWrapper()
+        End If
+    End Sub
+
+    Public Sub Write_Config(Path As String)
+
+    End Sub
+
+    Public Sub Read_Config(Path As String)
+
+    End Sub
+
+    Public Sub Extract_Exe(Optional exepath As String = Nothing, Optional exename As String = "parser.exe")
+        If exepath Is Nothing Then
+            exepath = ConfigFolder
+        End If
+        exepath = Path.Combine(exepath, exename)
+        Dim currassembly As Assembly = Assembly.GetExecutingAssembly()
+        Dim exestream As Stream = currassembly.GetManifestResourceStream("VisualProject.parser.exe")
+        File.WriteAllBytes(exepath, ReadFully(exestream))
+        EXE_PATH = exepath
     End Sub
 
 
 
-    Public Function IsValidRow(row As DataGridViewRow) As Boolean
-        Dim Counter As Integer = 0
-        For Each cell As DataGridViewCell In row.Cells
-            If Counter = 3 Then
+
+
+
+
+    'Add, Remove, Change Wrappers
+    Public Sub AddRowTable(Award As String, Name As String, Year As String)
+        DataTable.Rows.Add(Award, Name, Year)
+    End Sub
+
+    Public Sub ChangeRowTable(RowIndex As Integer, AwardType As String, Name As String, Year As String)
+        DataTable.Rows(RowIndex).Cells(0).Value = AwardType
+        DataTable.Rows(RowIndex).Cells(1).Value = Name
+        DataTable.Rows(RowIndex).Cells(2).Value = Year
+    End Sub
+
+    ' Adds A Row
+    Public Sub AddRowWrapper()
+        Dim SecondForm As New AddForm
+        SecondForm.Show()
+    End Sub
+
+    Private Sub AddRow_Click(sender As Object, e As EventArgs) Handles AddRow.Click
+        AddRowWrapper()
+    End Sub
+
+    'Removes A Row
+    Public Sub RemoveRowWrapper()
+        Dim RowDictionary As New SortedDictionary(Of Integer, Integer)
+        For Each Cell As DataGridViewCell In DataTable.SelectedCells
+            If Not RowDictionary.ContainsKey(Cell.RowIndex) Then
+                RowDictionary.Add(Cell.RowIndex, 1)
+            End If
+        Next
+        For Each Item As KeyValuePair(Of Integer, Integer) In RowDictionary.Reverse
+            Try
+                DataTable.Rows.RemoveAt(Item.Key)
+            Catch ex As InvalidOperationException
+            End Try
+        Next
+    End Sub
+
+    Private Sub RemoveRow_Click(sender As Object, e As EventArgs) Handles RemoveRow.Click
+        RemoveRowWrapper()
+    End Sub
+
+    'Edits A Row
+    Public Sub EditRowWrapper()
+        If DataTable.SelectedCells.Count > 0 Then
+            Dim RowDictionary As New SortedDictionary(Of Integer, Integer)
+            For Each Cell As DataGridViewCell In DataTable.SelectedCells
+                If Not RowDictionary.ContainsKey(Cell.RowIndex) Then
+                    RowDictionary.Add(Cell.RowIndex, 1)
+                End If
+            Next
+            Dim SecondForm As New ChangeForm
+            Dim RowNumber As Integer
+            For Each temp As KeyValuePair(Of Integer, Integer) In RowDictionary
+                RowNumber = temp.Key
                 Exit For
-            End If
-            If cell.Value = Nothing Then
-                Return False
-            End If
-            Counter += 1
-        Next
-        Return True
-    End Function
+            Next
+            SecondForm.Show()
+            SecondForm.FillForm(RowNumber, DataTable.Rows(RowNumber).Cells(0).Value, DataTable.Rows(RowNumber).Cells(1).Value, DataTable.Rows(RowNumber).Cells(2).Value)
+        End If
 
-    Public Function CountCharacter(ByVal searchChar As Char, ByVal value As String) As Integer
-        Dim count As Integer = 0
-        For Each c As Char In value
-            If c = searchChar Then
-                count += 1
-            End If
-        Next
-        Return count
-    End Function
+    End Sub
 
-    Public Function NonEmptyElements(ByRef stringArray As String()) As Integer
-        Dim count As Integer = 0
 
-        For Each element As String In stringArray
-            If element <> String.Empty Then
-                count += 1
-            Else
-                Exit For
-            End If
-        Next
-        Return count
-    End Function
 
+
+
+
+    'Helper Functions
     Public Function ReadFully(input As Stream) As Byte()
         Dim buffer(input.Length) As Byte
         Using br As New BinaryReader(input)
@@ -85,8 +152,47 @@ Public Class AwardGenerator
         Return buffer.ToArray
     End Function
 
+    Public Function FormatStringArray(StringArray As String()) As String()
+        Dim templist As List(Of String) = StringArray.ToList
+        templist.RemoveAll(AddressOf String.IsNullOrEmpty)
+        Return templist.ToArray
+    End Function
 
-    ' Export As CSV
+    Public Function RemoveFirstAndLast(StringArray As String()) As String()
+        Dim ret As New List(Of String)
+        For counter As Integer = 1 To StringArray.Length - 2
+            ret.Add(StringArray(counter))
+        Next counter
+        Return ret.ToArray
+    End Function
+
+    Public Function FormatSaveType(item As String) As String
+        Select Case item
+            Case "0"
+                Return "TXT"
+            Case "1"
+                Return "CSV"
+            Case "2"
+                Return "NONE"
+            Case Else
+                Return "???"
+        End Select
+    End Function
+
+    Public Function GenerateStreamFromArray(StringArray As String()) As Stream
+        Dim stream As New MemoryStream()
+        Dim writer As New StreamWriter(stream)
+        For Each Line As String In StringArray
+            writer.WriteLine(Line)
+        Next
+        writer.Flush()
+        stream.Position = 0
+        Return stream
+    End Function
+
+
+    'Export And Import Wrappers
+    'Export As CSV
     Public Sub ExportCSV(outPath As String)
         Try
             Using outStream As StreamWriter = New StreamWriter(outPath)
@@ -94,9 +200,11 @@ Public Class AwardGenerator
                     For Each row As DataGridViewRow In DataTable.Rows
                         If Not row.IsNewRow Then
                             Try
-                                outStream.WriteLine(String.Format("""{0}"",""{1}""""{2}""", row.Cells(0).Value.ToString, row.Cells(1).Value.ToString), row.Cells(2).Value.ToString)
+                                outStream.WriteLine(String.Format("""{0}"",""{1}"",""{2}""", row.Cells(0).Value.Replace("""", """"""),
+                                                                                            row.Cells(1).Value.Replace("""", """"""),
+                                                                                            row.Cells(2).Value.Replace("""", """""")))
                             Catch ex As Exception
-                                MsgBox("Error on line" & row.Cells(0).ToString)
+                                MsgBox("Error on line" & row.Cells(0).ToString & ex.ToString)
                             End Try
                         End If
                     Next
@@ -112,6 +220,7 @@ Public Class AwardGenerator
             MsgBox("an error occured! i dont know what happened >:L" & ex.ToString)
         End Try
     End Sub
+
     ' Read As CSV
     Private Sub ParseCsv(ResourcePath As String)
         Dim WrongLineNumber As New ArrayList
@@ -131,13 +240,13 @@ Public Class AwardGenerator
                     parser.SetDelimiters(",")
                     parser.HasFieldsEnclosedInQuotes = True
 
-
+                    Dim AskedDefault = False
                     While Not parser.EndOfData
                         ' first incremenet the counter vars
                         LineNumber += 1
 
                         Try
-                            Fields = parser.ReadFields()
+                            Fields = FormatStringArray(parser.ReadFields())
                         Catch ex As FileIO.MalformedLineException
                             WrongLineNumber.Add(LineNumber)
                             WrongLineReason.Add("Line cannot be parsed!")
@@ -145,19 +254,30 @@ Public Class AwardGenerator
                             Continue While
                         End Try
 
-                        If 1 >= NonEmptyElements(Fields) Or NonEmptyElements(Fields) >= 3 Then
-                            ' write it to Erorr
-                            WrongLineNumber.Add(LineNumber)
-                            If NonEmptyElements(Fields) <= 1 Then
-                                WrongLineReason.Add("The line is too short, <= 1")
-                            Else
-                                WrongLineReason.Add("The line is too long, >= 3")
-                            End If
-                            Warning = True
 
+                        If Fields.Length < 2 Then
+                            WrongLineNumber.Add(LineNumber)
+                            WrongLineReason.Add("Line is too short! " & String.Join(",", Fields))
+
+                        ElseIf Fields.Length = 2 Then
+
+                            If Not AskedDefault Then
+                                MsgBox("Assuming 2-length lines as " & DefaultItem & "'s")
+                                AskedDefault = True
+                            End If
+                            DataTable.Rows.Add(DefaultItem, Fields(0), Fields(1))
                         Else
-                            DataTable.Rows.Add(Fields(0), Fields(1))
-                            TrophyNumber += 1
+                            If PossibleItems.Contains(Fields(0)) Then
+                                DataTable.Rows.Add(Fields(0), String.Join(" ", RemoveFirstAndLast(Fields)), Fields(Fields.Length - 1))
+                                TrophyNumber += 1
+                            Else
+                                Dim templist As List(Of String) = Fields.ToList
+                                templist.RemoveAt(templist.Count - 1)
+                                DataTable.Rows.Add(DefaultItem, String.Join(" ", templist.ToArray), Fields(Fields.Length - 1))
+                                TrophyNumber += 1
+
+                            End If
+
                         End If
 
                     End While
@@ -178,7 +298,7 @@ Public Class AwardGenerator
                 End Using
             Catch ex As IOException
                 MessageBox.Show("The file cannot be accessed. Ensure no other programs are using this file and retry",
-                                "File IO Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            "File IO Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Catch ex As Exception
                 MessageBox.Show("An error occured :(" & ex.ToString)
             End Try
@@ -200,58 +320,84 @@ Public Class AwardGenerator
         ParseCsv(CsvPath)
     End Sub
 
-
-    ' Write As Txt
+    ' Export As Txt
     Public Sub ExportTxt(outPath As String)
         Using txtwriter As New StreamWriter(outPath)
             txtwriter.WriteLine("{CSV}")
             For Each row As DataGridViewRow In DataTable.Rows
-                If IsValidRow(row) Then
-                    MsgBox("ISVALID")
-                    txtwriter.WriteLine(String.Format("""{0}""|""{1}""|""{2}""", row.Cells(0).Value.ToString, row.Cells(1).Value.ToString, row.Cells(2).Value.ToString))
-                End If
+                txtwriter.WriteLine(String.Format("""{0}"",""{1}"",""{2}""", row.Cells(0).Value.ToString.Replace("""", """"""),
+                                                              row.Cells(1).Value.ToString.Replace("""", """"""),
+                                                              row.Cells(2).Value.ToString.Replace("""", """""")))
             Next
+            If TROPHY_LIMITER.Count <> 0 Then
+                txtwriter.WriteLine("{TROPHY_LIMITER}")
+                For Each EachList As List(Of String) In TROPHY_LIMITER
+                    txtwriter.WriteLine(String.Join(" ", EachList.ConvertAll(Function(i As Integer) i.ToString())))
+                Next
+
+            End If
+            If PLAQUE_LIMITER.Count <> 0 Then
+                txtwriter.WriteLine("{PLAQUE_LIMITER}")
+                For Each EachList As List(Of String) In PLAQUE_LIMITER
+                    txtwriter.WriteLine(String.Join(" ", EachList.ConvertAll(Function(i As Integer) i.ToString())))
+                Next
+            End If
         End Using
     End Sub
+
     ' Read As TXT
     Private Sub ParseTxt(ResourcePath As String)
         Dim CurrentIdentity As String = String.Empty
-        Dim Splitted As String()
+        Dim stringArray As New List(Of String)
         For Each Line As String In File.ReadLines(ResourcePath)
-            If Line.StartsWith("{CSV}") Then
+            Dim processed = Line.ToLower
+            If processed = "{csv}" Then
                 CurrentIdentity = "CSV"
-            ElseIf Line.StartsWith("{TROPHY_LIMITER}") Then
+            ElseIf processed = "{trophy_limiter}" Then
                 CurrentIdentity = "T_LIMIT"
-            ElseIf Line.StartsWith("{PLAQUE_LIMITER}") Then
+            ElseIf processed = "{plauqe_limiter}" Then
                 CurrentIdentity = "P_LIMIT"
             Else
                 Select Case (CurrentIdentity)
                     Case "P_LIMIT"
-                        PLAQUE_LIMITER.Add(Line)
+                        PLAQUE_LIMITER.Add(Line.Split(" ").ToList)
                     Case "T_LIMIT"
-                        TROPHY_LIMITER.Add(Line)
+                        TROPHY_LIMITER.Add(Line.Split(" ").ToList)
                     Case "CSV"
-                        Splitted = Line.Split("|")
-                        If Splitted.Length <> 3 Then
-                            MsgBox("Error" & Line)
-                        Else
-                            DataTable.Rows.Add(Splitted(0), Splitted(1), Splitted(2))
-                        End If
+                        stringArray.Add(Line)
                 End Select
             End If
-
         Next
+        Dim AskDefault As Boolean = False
+        Using parser As FileIO.TextFieldParser = New FileIO.TextFieldParser(GenerateStreamFromArray(stringArray.ToArray))
+            parser.TextFieldType = FileIO.FieldType.Delimited
+            parser.SetDelimiters(",")
+            parser.HasFieldsEnclosedInQuotes = True
+            While Not parser.EndOfData
+                Try
+                    Dim line = FormatStringArray(parser.ReadFields())
+                    If line.Length < 3 Then
+                        MsgBox("errpr" & String.Join(" ", line))
+
+                    Else
+                        DataTable.Rows.Add(line(0), String.Join(" ", RemoveFirstAndLast(line)), line(line.Length - 1))
+
+                    End If
+
+                Catch ex As Exception
+                    MsgBox("error" & ex.ToString)
+                End Try
+            End While
+        End Using
     End Sub
 
     ' Wraps ParseTxt, Error checking
     Public Sub ImportTxt(TxtPath As String)
-        MsgBox(TxtPath & "start")
         If TxtPath.StartsWith("~") Then
             TxtPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & TxtPath.Remove(0, 1)
         End If
         If Not My.Computer.FileSystem.FileExists(TxtPath) Then
             MessageBox.Show("Path not found! Please double check value in text box", "Invalid Path", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            MsgBox(TxtPath)
             Exit Sub
         End If
         ' Passed all tests!
@@ -259,35 +405,7 @@ Public Class AwardGenerator
         ParseTxt(TxtPath)
     End Sub
 
-
-
-
-
-
-
-
-    Private Sub OnKeyDownForm(ByVal sender As Object, ByVal e As KeyEventArgs) Handles MyBase.KeyDown
-        If (e.Control AndAlso e.Shift AndAlso (e.KeyCode = Keys.S)) Then
-            ' When control and S press ave as
-            SaveAsPromptWrapper()
-        End If
-        If (e.Control AndAlso (e.KeyCode = Keys.S)) Then
-            ' control-s = SAVE
-            SaveFilesAbsolute()
-        End If
-    End Sub
-
-
-    Public Sub Write_Config(Path As String)
-
-    End Sub
-
-    Public Sub Read_Config(Path As String)
-
-    End Sub
-
-
-
+    ' Save/Load/Export
     Public Sub SaveAsPromptWrapper()
         If SaveAsPrompt.ShowDialog = DialogResult.OK Then
             Select Case SaveAsPrompt.FilterIndex
@@ -303,146 +421,109 @@ Public Class AwardGenerator
         End If
     End Sub
 
-
-    Public Sub OpenAsPromptWrapper()
+    Public Sub OpenAsPromptWrapper(Optional ChangeFilePath = True)
         If OpenAsPrompt.ShowDialog() = DialogResult.OK Then
-            MsgBox(OpenAsPrompt.FileName)
-            Select Case OpenAsPrompt.FilterIndex
-                ' selected txt
-                Case 1
-                    ImportTxt(OpenAsPrompt.FileName)
-                Case 2
-                    ImportCSV(OpenAsPrompt.FileName)
-                Case Else
-                    MsgBox("? happened")
-            End Select
-        End If
-    End Sub
-
-    Private Sub OpenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenToolStripMenuItem.Click
-        If DataTable.Rows.Count <> 0 And JustSaved = False Then
-            If MessageBox.Show("There is content in current table that would be lost. Are you sure?", "Verify", MessageBoxButtons.OKCancel,
-                               MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = System.Windows.Forms.DialogResult.Cancel Then
-                End
+            If OpenAsPrompt.FileName.ToLower.EndsWith(".csv") Then
+                ImportCSV(OpenAsPrompt.FileName)
+                If ChangeFilePath = True Then
+                    FileType = SaveTypes.CSV
+                End If
+            Else
+                ImportTxt(OpenAsPrompt.FileName)
+                If ChangeFilePath = True Then
+                    FileType = SaveTypes.TXT
+                End If
+            End If
+            If ChangeFilePath = True Then
+                FilePath = OpenAsPrompt.FileName
             End If
         End If
-        DataTable.Rows.Clear()
-        OpenAsPromptWrapper()
-
-    End Sub
-
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataTable.CellEndEdit
-        JustSaved = False
-    End Sub
-
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles AddRow.Click
-        Dim SecondForm As New AddForm
-        SecondForm.Show()
-    End Sub
-
-
-
-
-    Private Sub OpenToolStripMenuItem1_Click(sender As Object, e As EventArgs)
-
-    End Sub
-
-    Private Sub AddFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddFileToolStripMenuItem.Click
-        If OpenAsPrompt.ShowDialog() = DialogResult.OK Then
-            Try
-                ParseCsv(OpenAsPrompt.FileName)
-            Catch ex As Exception
-                MsgBox("I dont know what happened >:(" & ex.ToString)
-            End Try
-
-        End If
-    End Sub
-
-    Private Sub FilePath_Click(sender As Object, e As EventArgs)
-
-    End Sub
-
-    Private Sub AutoSaver_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs)
-
-    End Sub
-
-    Private Sub SetLimiters_Click(sender As Object, e As EventArgs) Handles SetLimiters.Click
-        Dim ThirdForm As New ChooseLimiters
-        ThirdForm.Show()
-    End Sub
-    Public Sub UpdateItems()
-        NumberAwards.Text = DataTable.Rows.Count
-    End Sub
-
-    Private Sub RemoveRow_Click(sender As Object, e As EventArgs) Handles RemoveRow.Click
-        Dim RowDictionary As New SortedDictionary(Of Integer, Integer)
-        For Each Cell As DataGridViewCell In DataTable.SelectedCells
-            If Not RowDictionary.ContainsKey(Cell.RowIndex) Then
-                RowDictionary.Add(Cell.RowIndex, 1)
-            End If
-        Next
-        For Each Item As KeyValuePair(Of Integer, Integer) In RowDictionary.Reverse
-            Try
-                DataTable.Rows.RemoveAt(Item.Key)
-            Catch ex As InvalidOperationException
-            End Try
-        Next
-    End Sub
-
-    Public Sub Extract_Exe(Optional exepath As String = Nothing, Optional exename As String = "parser.exe")
-        If exepath Is Nothing Then
-            exepath = ConfigFolder
-        End If
-        exepath = Path.Combine(exepath, exename)
-        MsgBox(exepath)
-        Dim currassembly As Assembly = Assembly.GetExecutingAssembly()
-        Dim exestream As Stream = currassembly.GetManifestResourceStream("VisualProject.parser.exe")
-        File.WriteAllBytes(exepath, ReadFully(exestream))
-        EXE_PATH = exepath
     End Sub
 
     Public Sub SaveFilesAbsolute()
         If FilePath = String.Empty Then
             FilePath = (New DirectoryInfo(Path.Combine(ConfigFolder, OpenNewName))).FullName
         End If
-        If SaveType = "TXT" Then
+        If FileType = SaveTypes.TXT Then
             ExportTxt(FilePath)
-        ElseIf SaveType = "CSV" Then
+        ElseIf FileType = SaveTypes.CSV Then
             ExportCSV(FilePath)
         End If
     End Sub
 
-
-    Private Sub exteact_Click(sender As Object, e As EventArgs) Handles exportFinal.Click
-        If FilePath = String.Empty Then
-            FilePath = ".settings_awards/temp.txt"
+    Public Sub ExportAsDXFWrapper()
+        Dim OptionsArray As New List(Of String)
+        If ExportAsPrompt.ShowDialog = DialogResult.OK Then
+            OptionsArray.Add("-f " & """" & ExportAsPrompt.FileName & """")
+        Else
+            Exit Sub
         End If
         SaveFilesAbsolute()
-        Dim tempfile As String = Nothing
-        If SaveType = "TXT" Then
-            tempfile = "t"
-        ElseIf SaveType = "CSV" Then
-            tempfile = "c"
+
+        If FileType = SaveTypes.TXT Then
+            OptionsArray.Add("-t")
+        ElseIf FileType = SaveTypes.CSV Then
+            OptionsArray.Add("-c")
         End If
-        MsgBox(EXE_PATH & " -n AmazingItWorked " & "-" & tempfile & " " & """" & FilePath & """")
-        Shell(EXE_PATH & " -n AmazingItWorked " & "-" & tempfile & " " & """" & FilePath & """")
+
+        MsgBox(EXE_PATH & " " & String.Join(" ", OptionsArray) & " " & """" & FilePath & """")
+        Clipboard.SetText(EXE_PATH & " " & String.Join(" ", OptionsArray) & " " & """" & FilePath & """")
+        Shell(EXE_PATH & " " & String.Join(" ", OptionsArray) & " " & """" & FilePath & """")
+    End Sub
+
+    '
+    Private Sub ChangeRowButton_Click(sender As Object, e As EventArgs) Handles ChangeRowButton.Click
+        EditRowWrapper()
     End Sub
 
 
 
-    Private Sub DataTable_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataTable.CellContentClick
 
+
+
+    ' Delimiters
+    Private Sub SetLimiters_Click(sender As Object, e As EventArgs) Handles SetLimiters.Click
+        Dim ThirdForm As New ChooseLimiters
+        ThirdForm.Show()
     End Sub
 
+
+
+
+    ' Event Handlers
+    ' Open in Toolstrip
+    Private Sub OpenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenToolStripMenuItem.Click
+        If DataTable.Rows.Count <> 0 Then
+            If MessageBox.Show("There is content in current table that would be lost. Are you sure?", "Verify", MessageBoxButtons.OKCancel,
+                           MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) = DialogResult.Cancel Then
+                Exit Sub
+            End If
+        End If
+        DataTable.Rows.Clear()
+        OpenAsPromptWrapper()
+    End Sub
+
+    'Add To.. In Toolstrip
+    Private Sub AddFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddFileToolStripMenuItem.Click
+        Try
+            OpenAsPromptWrapper(False)
+        Catch ex As Exception
+            MsgBox("I dont know what happened >:(" & ex.ToString)
+        End Try
+    End Sub
+
+    'Save As in Toolstrip
     Private Sub SaveAsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveAsToolStripMenuItem.Click
         SaveAsPromptWrapper()
     End Sub
 
+    'Save in toolstrip
     Private Sub SaveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveToolStripMenuItem.Click
         SaveFilesAbsolute()
     End Sub
 
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
+    'Shows FileInfo
+    Private Sub FileInfo_Click_(sender As Object, e As EventArgs) Handles FileInfo.Click
         Dim TempFilePath As String
         If FilePath = String.Empty Then
             TempFilePath = "None"
@@ -450,8 +531,21 @@ Public Class AwardGenerator
             TempFilePath = FilePath
         End If
         MessageBox.Show("File Path: " & TempFilePath & Environment.NewLine & Environment.NewLine &
-                        "File Type: " & SaveType & Environment.NewLine & Environment.NewLine
-                        )
+                    "File Type: " & FormatSaveType(FileType) & Environment.NewLine & Environment.NewLine
+                    )
     End Sub
 
+
+
+    Private Sub TabAward_Click(sender As Object, e As EventArgs) Handles TabAward.Click
+
+    End Sub
+
+    Private Sub AddToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddToolStripMenuItem.Click
+
+    End Sub
+
+    Private Sub RemoveRowToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveRowToolStripMenuItem.Click
+
+    End Sub
 End Class

@@ -99,6 +99,12 @@
     <Compile Include="ChooseLimiters.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ChangeForm.Designer.vb">
+      <DependentUpon>ChangeForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ChangeForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainFile.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -128,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ChooseLimiters.resx">
       <DependentUpon>ChooseLimiters.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChangeForm.resx">
+      <DependentUpon>ChangeForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainFile.resx">
       <DependentUpon>MainFile.vb</DependentUpon>

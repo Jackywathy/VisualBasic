@@ -12,3 +12,4 @@ S:\My Documents\Visual Studio 2015\Projects\VisualProject\VisualProject\obj\Debu
 S:\My Documents\Visual Studio 2015\Projects\VisualProject\VisualProject\obj\Debug\VisualProject.AwardGenerator.resources
 S:\My Documents\Visual Studio 2015\Projects\VisualProject\VisualProject\obj\Debug\VisualProject.ChooseLimiters.resources
 S:\My Documents\Visual Studio 2015\Projects\VisualProject\VisualProject\bin\Debug\Resources\parser.exe
+S:\My Documents\Visual Studio 2015\Projects\VisualProject\VisualProject\obj\Debug\VisualProject.ChangeForm.resources

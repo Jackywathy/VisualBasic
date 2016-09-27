@@ -111,7 +111,7 @@ Partial Class AddForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.CancelFromRow
-        Me.ClientSize = New System.Drawing.Size(321, 135)
+        Me.ClientSize = New System.Drawing.Size(334, 141)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Plaque_BUTTON)

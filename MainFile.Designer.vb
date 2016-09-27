@@ -28,18 +28,21 @@ Partial Class AwardGenerator
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SaveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SaveAsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DXFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AddFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RemoveRowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.KeyBindingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.TabAward = New System.Windows.Forms.TabPage()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.exportFinal = New System.Windows.Forms.Button()
+        Me.ChangeRowButton = New System.Windows.Forms.Button()
+        Me.FileInfo = New System.Windows.Forms.Button()
         Me.NumberAwards = New System.Windows.Forms.Label()
         Me.SetLimiters = New System.Windows.Forms.Button()
         Me.RemoveRow = New System.Windows.Forms.Button()
@@ -51,6 +54,7 @@ Partial Class AwardGenerator
         Me.Year_COL = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.SaveAsPrompt = New System.Windows.Forms.SaveFileDialog()
+        Me.ExportAsPrompt = New System.Windows.Forms.SaveFileDialog()
         Me.MenuStrip1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -61,7 +65,7 @@ Partial Class AwardGenerator
         '
         'OpenAsPrompt
         '
-        Me.OpenAsPrompt.Filter = "TXT|*.txt|CSV|*.csv"
+        Me.OpenAsPrompt.Filter = "txt/csv Files|*.csv;*.txt"
         '
         'CSV_Ex_Trophy
         '
@@ -71,7 +75,7 @@ Partial Class AwardGenerator
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(544, 24)
@@ -80,7 +84,7 @@ Partial Class AwardGenerator
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenToolStripMenuItem, Me.SaveToolStripMenuItem, Me.SaveAsToolStripMenuItem, Me.ExportToolStripMenuItem, Me.AddFileToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenToolStripMenuItem, Me.AddFileToolStripMenuItem, Me.SaveToolStripMenuItem, Me.SaveAsToolStripMenuItem, Me.ExportToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
@@ -88,45 +92,64 @@ Partial Class AwardGenerator
         'OpenToolStripMenuItem
         '
         Me.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem"
-        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.OpenToolStripMenuItem.Text = "Open.."
-        '
-        'SaveToolStripMenuItem
-        '
-        Me.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem"
-        Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.SaveToolStripMenuItem.Text = "Save"
-        '
-        'SaveAsToolStripMenuItem
-        '
-        Me.SaveAsToolStripMenuItem.Name = "SaveAsToolStripMenuItem"
-        Me.SaveAsToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.SaveAsToolStripMenuItem.Text = "Save As.."
-        '
-        'ExportToolStripMenuItem
-        '
-        Me.ExportToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DXFToolStripMenuItem})
-        Me.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem"
-        Me.ExportToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.ExportToolStripMenuItem.Text = "Export As"
-        '
-        'DXFToolStripMenuItem
-        '
-        Me.DXFToolStripMenuItem.Name = "DXFToolStripMenuItem"
-        Me.DXFToolStripMenuItem.Size = New System.Drawing.Size(98, 22)
-        Me.DXFToolStripMenuItem.Text = ".DXF"
+        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(213, 22)
+        Me.OpenToolStripMenuItem.Text = "Open..              Ctrl-O"
         '
         'AddFileToolStripMenuItem
         '
         Me.AddFileToolStripMenuItem.Name = "AddFileToolStripMenuItem"
-        Me.AddFileToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.AddFileToolStripMenuItem.Text = "Add File To..."
+        Me.AddFileToolStripMenuItem.Size = New System.Drawing.Size(213, 22)
+        Me.AddFileToolStripMenuItem.Text = "Add File To...   Ctrl-Shift-O"
+        '
+        'SaveToolStripMenuItem
+        '
+        Me.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem"
+        Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(213, 22)
+        Me.SaveToolStripMenuItem.Text = "Save                  Crtl-S"
+        '
+        'SaveAsToolStripMenuItem
+        '
+        Me.SaveAsToolStripMenuItem.Name = "SaveAsToolStripMenuItem"
+        Me.SaveAsToolStripMenuItem.Size = New System.Drawing.Size(213, 22)
+        Me.SaveAsToolStripMenuItem.Text = "Save As..           Ctrl-Shift-S"
+        '
+        'ExportToolStripMenuItem
+        '
+        Me.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem"
+        Me.ExportToolStripMenuItem.Size = New System.Drawing.Size(213, 22)
+        Me.ExportToolStripMenuItem.Text = "Export As          Ctrl-E"
         '
         'EditToolStripMenuItem
         '
+        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddToolStripMenuItem, Me.RemoveRowToolStripMenuItem})
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
         Me.EditToolStripMenuItem.Size = New System.Drawing.Size(39, 20)
         Me.EditToolStripMenuItem.Text = "Edit"
+        '
+        'AddToolStripMenuItem
+        '
+        Me.AddToolStripMenuItem.Name = "AddToolStripMenuItem"
+        Me.AddToolStripMenuItem.Size = New System.Drawing.Size(123, 22)
+        Me.AddToolStripMenuItem.Text = "Add..."
+        '
+        'RemoveRowToolStripMenuItem
+        '
+        Me.RemoveRowToolStripMenuItem.Name = "RemoveRowToolStripMenuItem"
+        Me.RemoveRowToolStripMenuItem.Size = New System.Drawing.Size(123, 22)
+        Me.RemoveRowToolStripMenuItem.Text = "Remove.."
+        '
+        'HelpToolStripMenuItem
+        '
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.KeyBindingsToolStripMenuItem})
+        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
+        Me.HelpToolStripMenuItem.Text = "Help"
+        '
+        'KeyBindingsToolStripMenuItem
+        '
+        Me.KeyBindingsToolStripMenuItem.Name = "KeyBindingsToolStripMenuItem"
+        Me.KeyBindingsToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
+        Me.KeyBindingsToolStripMenuItem.Text = "Key Bindings"
         '
         'TabPage1
         '
@@ -160,8 +183,8 @@ Partial Class AwardGenerator
         '
         'TabAward
         '
-        Me.TabAward.Controls.Add(Me.Button1)
-        Me.TabAward.Controls.Add(Me.exportFinal)
+        Me.TabAward.Controls.Add(Me.ChangeRowButton)
+        Me.TabAward.Controls.Add(Me.FileInfo)
         Me.TabAward.Controls.Add(Me.NumberAwards)
         Me.TabAward.Controls.Add(Me.SetLimiters)
         Me.TabAward.Controls.Add(Me.RemoveRow)
@@ -176,23 +199,23 @@ Partial Class AwardGenerator
         Me.TabAward.Text = "Awards"
         Me.TabAward.UseVisualStyleBackColor = True
         '
-        'Button1
+        'ChangeRowButton
         '
-        Me.Button1.Location = New System.Drawing.Point(356, 9)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 15
-        Me.Button1.Text = "FileInfo"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.ChangeRowButton.Location = New System.Drawing.Point(187, 330)
+        Me.ChangeRowButton.Name = "ChangeRowButton"
+        Me.ChangeRowButton.Size = New System.Drawing.Size(75, 23)
+        Me.ChangeRowButton.TabIndex = 16
+        Me.ChangeRowButton.Text = "Edit..."
+        Me.ChangeRowButton.UseVisualStyleBackColor = True
         '
-        'exportFinal
+        'FileInfo
         '
-        Me.exportFinal.Location = New System.Drawing.Point(327, 328)
-        Me.exportFinal.Name = "exportFinal"
-        Me.exportFinal.Size = New System.Drawing.Size(75, 23)
-        Me.exportFinal.TabIndex = 14
-        Me.exportFinal.Text = "Export"
-        Me.exportFinal.UseVisualStyleBackColor = True
+        Me.FileInfo.Location = New System.Drawing.Point(356, 9)
+        Me.FileInfo.Name = "FileInfo"
+        Me.FileInfo.Size = New System.Drawing.Size(75, 23)
+        Me.FileInfo.TabIndex = 15
+        Me.FileInfo.Text = "FileInfo"
+        Me.FileInfo.UseVisualStyleBackColor = True
         '
         'NumberAwards
         '
@@ -205,7 +228,7 @@ Partial Class AwardGenerator
         '
         'SetLimiters
         '
-        Me.SetLimiters.Location = New System.Drawing.Point(188, 329)
+        Me.SetLimiters.Location = New System.Drawing.Point(309, 330)
         Me.SetLimiters.Name = "SetLimiters"
         Me.SetLimiters.Size = New System.Drawing.Size(104, 23)
         Me.SetLimiters.TabIndex = 11
@@ -288,6 +311,10 @@ Partial Class AwardGenerator
         '
         Me.SaveAsPrompt.Filter = "TXT|*.txt|CSV|*.csv"
         '
+        'ExportAsPrompt
+        '
+        Me.ExportAsPrompt.Filter = "DXF File|*.dxf"
+        '
         'AwardGenerator
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -320,8 +347,6 @@ Partial Class AwardGenerator
     Friend WithEvents SaveToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SaveAsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ExportToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents DXFToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents TabPage1 As TabPage
     Friend WithEvents Label2 As Label
     Friend WithEvents PictureBox1 As PictureBox
@@ -337,7 +362,13 @@ Partial Class AwardGenerator
     Friend WithEvents AddFileToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SetLimiters As Button
     Friend WithEvents NumberAwards As Label
-    Friend WithEvents exportFinal As Button
     Friend WithEvents SaveAsPrompt As SaveFileDialog
-    Friend WithEvents Button1 As Button
+    Friend WithEvents FileInfo As Button
+    Friend WithEvents ExportAsPrompt As SaveFileDialog
+    Friend WithEvents ChangeRowButton As Button
+    Friend WithEvents EditToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AddToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents RemoveRowToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents KeyBindingsToolStripMenuItem As ToolStripMenuItem
 End Class
