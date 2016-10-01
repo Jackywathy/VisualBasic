@@ -24,6 +24,15 @@ Partial Class ChooseLimiters
     Private Sub InitializeComponent()
         Me.LimiterTrophy = New System.Windows.Forms.TabControl()
         Me.TrophyPage = New System.Windows.Forms.TabPage()
+        Me.SaveToSheet = New System.Windows.Forms.Button()
+        Me.NextSheet = New System.Windows.Forms.Button()
+        Me.SheetDropBox = New System.Windows.Forms.ComboBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.NumberSheet = New System.Windows.Forms.Label()
+        Me.TotalSheets = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.NoTrophy = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.CancelButtonTrophy = New System.Windows.Forms.Button()
         Me.TrophyRowRight1 = New System.Windows.Forms.Button()
         Me.TrophyRowRight2 = New System.Windows.Forms.Button()
@@ -65,6 +74,15 @@ Partial Class ChooseLimiters
         '
         'TrophyPage
         '
+        Me.TrophyPage.Controls.Add(Me.SaveToSheet)
+        Me.TrophyPage.Controls.Add(Me.NextSheet)
+        Me.TrophyPage.Controls.Add(Me.SheetDropBox)
+        Me.TrophyPage.Controls.Add(Me.Label2)
+        Me.TrophyPage.Controls.Add(Me.NumberSheet)
+        Me.TrophyPage.Controls.Add(Me.TotalSheets)
+        Me.TrophyPage.Controls.Add(Me.Button1)
+        Me.TrophyPage.Controls.Add(Me.NoTrophy)
+        Me.TrophyPage.Controls.Add(Me.Label1)
         Me.TrophyPage.Controls.Add(Me.CancelButtonTrophy)
         Me.TrophyPage.Controls.Add(Me.TrophyRowRight1)
         Me.TrophyPage.Controls.Add(Me.TrophyRowRight2)
@@ -96,13 +114,93 @@ Partial Class ChooseLimiters
         Me.TrophyPage.Text = "Trophy"
         Me.TrophyPage.UseVisualStyleBackColor = True
         '
+        'SaveToSheet
+        '
+        Me.SaveToSheet.Location = New System.Drawing.Point(523, 30)
+        Me.SaveToSheet.Name = "SaveToSheet"
+        Me.SaveToSheet.Size = New System.Drawing.Size(75, 23)
+        Me.SaveToSheet.TabIndex = 32
+        Me.SaveToSheet.Text = "Save"
+        Me.SaveToSheet.UseVisualStyleBackColor = True
+        '
+        'NextSheet
+        '
+        Me.NextSheet.Location = New System.Drawing.Point(523, 59)
+        Me.NextSheet.Name = "NextSheet"
+        Me.NextSheet.Size = New System.Drawing.Size(75, 23)
+        Me.NextSheet.TabIndex = 31
+        Me.NextSheet.Text = "Next"
+        Me.NextSheet.UseVisualStyleBackColor = True
+        '
+        'SheetDropBox
+        '
+        Me.SheetDropBox.FormattingEnabled = True
+        Me.SheetDropBox.Location = New System.Drawing.Point(99, 75)
+        Me.SheetDropBox.Name = "SheetDropBox"
+        Me.SheetDropBox.Size = New System.Drawing.Size(119, 21)
+        Me.SheetDropBox.TabIndex = 30
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(18, 78)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(75, 13)
+        Me.Label2.TabIndex = 29
+        Me.Label2.Text = "Current Sheet:"
+        '
+        'NumberSheet
+        '
+        Me.NumberSheet.AutoSize = True
+        Me.NumberSheet.Location = New System.Drawing.Point(95, 50)
+        Me.NumberSheet.Name = "NumberSheet"
+        Me.NumberSheet.Size = New System.Drawing.Size(131, 13)
+        Me.NumberSheet.TabIndex = 28
+        Me.NumberSheet.Text = "REPLACED BY NUMBER"
+        '
+        'TotalSheets
+        '
+        Me.TotalSheets.AutoSize = True
+        Me.TotalSheets.Location = New System.Drawing.Point(18, 50)
+        Me.TotalSheets.Name = "TotalSheets"
+        Me.TotalSheets.Size = New System.Drawing.Size(70, 13)
+        Me.TotalSheets.TabIndex = 27
+        Me.TotalSheets.Text = "Total Sheets:"
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(346, 59)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 26
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'NoTrophy
+        '
+        Me.NoTrophy.AutoSize = True
+        Me.NoTrophy.Location = New System.Drawing.Point(95, 27)
+        Me.NoTrophy.Name = "NoTrophy"
+        Me.NoTrophy.Size = New System.Drawing.Size(131, 13)
+        Me.NoTrophy.TabIndex = 24
+        Me.NoTrophy.Text = "REPLACED BY NUMBER"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(18, 27)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(78, 13)
+        Me.Label1.TabIndex = 23
+        Me.Label1.Text = "Total Trophies:"
+        '
         'CancelButtonTrophy
         '
-        Me.CancelButtonTrophy.Location = New System.Drawing.Point(521, 52)
+        Me.CancelButtonTrophy.Location = New System.Drawing.Point(523, 88)
         Me.CancelButtonTrophy.Name = "CancelButtonTrophy"
         Me.CancelButtonTrophy.Size = New System.Drawing.Size(75, 23)
         Me.CancelButtonTrophy.TabIndex = 22
-        Me.CancelButtonTrophy.Text = "Cancel"
+        Me.CancelButtonTrophy.Text = "Exit"
         Me.CancelButtonTrophy.UseVisualStyleBackColor = True
         '
         'TrophyRowRight1
@@ -134,7 +232,6 @@ Partial Class ChooseLimiters
         '
         'TrophyRowRight4
         '
-        Me.TrophyRowRight4.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.TrophyRowRight4.Location = New System.Drawing.Point(548, 170)
         Me.TrophyRowRight4.Name = "TrophyRowRight4"
         Me.TrophyRowRight4.Size = New System.Drawing.Size(32, 23)
@@ -189,7 +286,6 @@ Partial Class ChooseLimiters
         '
         'TrophyCol2
         '
-        Me.TrophyCol2.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.TrophyCol2.Location = New System.Drawing.Point(319, 110)
         Me.TrophyCol2.Name = "TrophyCol2"
         Me.TrophyCol2.Size = New System.Drawing.Size(38, 23)
@@ -199,7 +295,6 @@ Partial Class ChooseLimiters
         '
         'TrophyCol1
         '
-        Me.TrophyCol1.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.TrophyCol1.Location = New System.Drawing.Point(188, 110)
         Me.TrophyCol1.Name = "TrophyCol1"
         Me.TrophyCol1.Size = New System.Drawing.Size(38, 23)
@@ -359,4 +454,13 @@ Partial Class ChooseLimiters
     Friend WithEvents TrophyRowRight3 As Button
     Friend WithEvents TrophyRowRight4 As Button
     Friend WithEvents CancelButtonTrophy As Button
+    Friend WithEvents Label1 As Label
+    Friend WithEvents NoTrophy As Label
+    Friend WithEvents Button1 As Button
+    Friend WithEvents NumberSheet As Label
+    Friend WithEvents TotalSheets As Label
+    Friend WithEvents SheetDropBox As ComboBox
+    Friend WithEvents Label2 As Label
+    Friend WithEvents SaveToSheet As Button
+    Friend WithEvents NextSheet As Button
 End Class

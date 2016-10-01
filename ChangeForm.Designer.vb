@@ -26,7 +26,7 @@ Partial Class ChangeForm
         Me.NameTextBox = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.YearTextBox = New System.Windows.Forms.TextBox()
-        Me.AddToRow = New System.Windows.Forms.Button()
+        Me.ChangeToRow = New System.Windows.Forms.Button()
         Me.CancelFromRow = New System.Windows.Forms.Button()
         Me.Plaque_BUTTON = New System.Windows.Forms.RadioButton()
         Me.Trophy_BUTTON = New System.Windows.Forms.RadioButton()
@@ -64,14 +64,14 @@ Partial Class ChangeForm
         Me.YearTextBox.Size = New System.Drawing.Size(157, 20)
         Me.YearTextBox.TabIndex = 10
         '
-        'AddToRow
+        'ChangeToRow
         '
-        Me.AddToRow.Location = New System.Drawing.Point(219, 34)
-        Me.AddToRow.Name = "AddToRow"
-        Me.AddToRow.Size = New System.Drawing.Size(75, 23)
-        Me.AddToRow.TabIndex = 11
-        Me.AddToRow.Text = "Change"
-        Me.AddToRow.UseVisualStyleBackColor = True
+        Me.ChangeToRow.Location = New System.Drawing.Point(219, 34)
+        Me.ChangeToRow.Name = "ChangeToRow"
+        Me.ChangeToRow.Size = New System.Drawing.Size(75, 23)
+        Me.ChangeToRow.TabIndex = 11
+        Me.ChangeToRow.Text = "Change"
+        Me.ChangeToRow.UseVisualStyleBackColor = True
         '
         'CancelFromRow
         '
@@ -107,7 +107,7 @@ Partial Class ChangeForm
         '
         'ChangeForm
         '
-        Me.AcceptButton = Me.AddToRow
+        Me.AcceptButton = Me.ChangeToRow
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.CancelFromRow
@@ -115,7 +115,7 @@ Partial Class ChangeForm
         Me.Controls.Add(Me.Plaque_BUTTON)
         Me.Controls.Add(Me.Trophy_BUTTON)
         Me.Controls.Add(Me.CancelFromRow)
-        Me.Controls.Add(Me.AddToRow)
+        Me.Controls.Add(Me.ChangeToRow)
         Me.Controls.Add(Me.YearTextBox)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
@@ -131,7 +131,7 @@ Partial Class ChangeForm
     Friend WithEvents NameTextBox As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents YearTextBox As TextBox
-    Friend WithEvents AddToRow As Button
+    Friend WithEvents ChangeToRow As Button
     Friend WithEvents CancelFromRow As Button
     Friend WithEvents Plaque_BUTTON As RadioButton
     Friend WithEvents Trophy_BUTTON As RadioButton

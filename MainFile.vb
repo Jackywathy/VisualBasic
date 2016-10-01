@@ -29,27 +29,15 @@ Public Class AwardGenerator
     Private Sub ProgramLoad(sender As Object, e As EventArgs) Handles MyBase.Load
         DataTable.DataMember = "AwardTable"
         JustSaved = True
-        UpdateItems()
         PLAQUE_LIMITER = New List(Of List(Of String))
         TROPHY_LIMITER = New List(Of List(Of String))
         Create_Hidden(ConfigFolder)
         Extract_Exe()
         FileType = SaveTypes.TXT
         FilePath = ""
+        UpdateButtons()
     End Sub
 
-    Private Sub OnKeyDownForm(ByVal sender As Object, ByVal e As KeyEventArgs) Handles MyBase.KeyDown
-        If (e.Control AndAlso e.Shift AndAlso (e.KeyCode = Keys.S)) Then
-            ' When control and S press ave as
-            SaveAsPromptWrapper()
-        ElseIf (e.Control AndAlso (e.KeyCode = Keys.S)) Then
-            ' control-s = SAVE
-            SaveFilesAbsolute()
-        ElseIf (e.Control AndAlso (e.KeyCode = Keys.E)) Then
-            'control-e = Export
-            ExportAsDXFWrapper()
-        End If
-    End Sub
 
     Public Sub Write_Config(Path As String)
 
@@ -70,6 +58,19 @@ Public Class AwardGenerator
         EXE_PATH = exepath
     End Sub
 
+    Private Sub OnKeyDownForm(ByVal sender As Object, ByVal e As KeyEventArgs) Handles MyBase.KeyDown
+        If (e.Control AndAlso e.Shift AndAlso (e.KeyCode = Keys.S)) Then
+            ' When control and S press ave as
+            SaveAsPromptWrapper()
+        ElseIf (e.Control AndAlso (e.KeyCode = Keys.S)) Then
+            ' control-s = SAVE
+            SaveFilesAbsolute()
+        ElseIf (e.Control AndAlso (e.KeyCode = Keys.E)) Then
+            'control-e = Export
+            ExportAsDXFWrapper()
+        End If
+    End Sub
+
 
 
 
@@ -79,6 +80,7 @@ Public Class AwardGenerator
     'Add, Remove, Change Wrappers
     Public Sub AddRowTable(Award As String, Name As String, Year As String)
         DataTable.Rows.Add(Award, Name, Year)
+        UpdateButtons()
     End Sub
 
     Public Sub ChangeRowTable(RowIndex As Integer, AwardType As String, Name As String, Year As String)
@@ -90,7 +92,11 @@ Public Class AwardGenerator
     ' Adds A Row
     Public Sub AddRowWrapper()
         Dim SecondForm As New AddForm
-        SecondForm.Show()
+        If SecondForm.ShowDialog() = DialogResult.OK Then
+            Dim templist As List(Of String) = SecondForm.GetTextRow
+            DataTable.Rows.Add(templist(0), templist(1), templist(2))
+        End If
+        UpdateButtons()
     End Sub
 
     Private Sub AddRow_Click(sender As Object, e As EventArgs) Handles AddRow.Click
@@ -111,6 +117,7 @@ Public Class AwardGenerator
             Catch ex As InvalidOperationException
             End Try
         Next
+        UpdateButtons()
     End Sub
 
     Private Sub RemoveRow_Click(sender As Object, e As EventArgs) Handles RemoveRow.Click
@@ -132,10 +139,14 @@ Public Class AwardGenerator
                 RowNumber = temp.Key
                 Exit For
             Next
-            SecondForm.Show()
             SecondForm.FillForm(RowNumber, DataTable.Rows(RowNumber).Cells(0).Value, DataTable.Rows(RowNumber).Cells(1).Value, DataTable.Rows(RowNumber).Cells(2).Value)
-        End If
+            If SecondForm.ShowDialog() = DialogResult.OK Then
+                Dim templist As ArrayList = SecondForm.GetEditItem
+                ChangeRowTable(templist(0), templist(1), templist(2), templist(3))
+            End If
 
+        End If
+        UpdateButtons()
     End Sub
 
 
@@ -318,6 +329,7 @@ Public Class AwardGenerator
         End If
         ' Passed all tests!
         ParseCsv(CsvPath)
+        UpdateButtons()
     End Sub
 
     ' Export As Txt
@@ -403,6 +415,7 @@ Public Class AwardGenerator
         ' Passed all tests!
 
         ParseTxt(TxtPath)
+        UpdateButtons()
     End Sub
 
     ' Save/Load/Export
@@ -471,7 +484,7 @@ Public Class AwardGenerator
         Shell(EXE_PATH & " " & String.Join(" ", OptionsArray) & " " & """" & FilePath & """")
     End Sub
 
-    '
+    ' Change
     Private Sub ChangeRowButton_Click(sender As Object, e As EventArgs) Handles ChangeRowButton.Click
         EditRowWrapper()
     End Sub
@@ -483,11 +496,31 @@ Public Class AwardGenerator
 
     ' Delimiters
     Private Sub SetLimiters_Click(sender As Object, e As EventArgs) Handles SetLimiters.Click
-        Dim ThirdForm As New ChooseLimiters
-        ThirdForm.Show()
+        Dim ThirdForm As New ChooseLimiters(TROPHY_LIMITER, PLAQUE_LIMITER, GetTrophyNumber(), GetPlaqueNumber())
+        If ThirdForm.ShowDialog() = DialogResult.OK Then
+
+        End If
     End Sub
 
+    Public Function GetTrophyNumber() As Integer
+        Dim Ret = 0
+        For Each TempRow As DataGridViewRow In DataTable.Rows
+            If TempRow.Cells(0).Value = "SCHOOL_TROPHY" Then
+                Ret += 1
+            End If
+        Next
+        Return Ret
+    End Function
 
+    Public Function GetPlaqueNumber() As Integer
+        Dim Ret = 0
+        For Each TempRow As DataGridViewRow In DataTable.Rows
+            If TempRow.Cells(0).Value = "SCHOOL_PLAQUE" Then
+                Ret += 1
+            End If
+        Next
+        Return Ret
+    End Function
 
 
     ' Event Handlers
@@ -536,16 +569,26 @@ Public Class AwardGenerator
     End Sub
 
 
+    Public Sub UpdateButtons()
+        If DataTable.Rows.Count <= 0 Then
+            SetLimiters.Enabled = False
+            ChangeRowButton.Enabled = False
+        Else
+            SetLimiters.Enabled = True
+            ChangeRowButton.Enabled = True
+        End If
+    End Sub
 
-    Private Sub TabAward_Click(sender As Object, e As EventArgs) Handles TabAward.Click
+    Private Sub FileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FileToolStripMenuItem.Click
 
     End Sub
 
-    Private Sub AddToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddToolStripMenuItem.Click
+    Private Sub ExportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportToolStripMenuItem.Click
+        ExportAsDXFWrapper()
+    End Sub
+
+    Private Sub MenuStrip1_ItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles MenuStrip1.ItemClicked
 
     End Sub
 
-    Private Sub RemoveRowToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveRowToolStripMenuItem.Click
-
-    End Sub
 End Class

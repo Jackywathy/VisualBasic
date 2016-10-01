@@ -129,13 +129,13 @@ Partial Class AwardGenerator
         'AddToolStripMenuItem
         '
         Me.AddToolStripMenuItem.Name = "AddToolStripMenuItem"
-        Me.AddToolStripMenuItem.Size = New System.Drawing.Size(123, 22)
+        Me.AddToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.AddToolStripMenuItem.Text = "Add..."
         '
         'RemoveRowToolStripMenuItem
         '
         Me.RemoveRowToolStripMenuItem.Name = "RemoveRowToolStripMenuItem"
-        Me.RemoveRowToolStripMenuItem.Size = New System.Drawing.Size(123, 22)
+        Me.RemoveRowToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.RemoveRowToolStripMenuItem.Text = "Remove.."
         '
         'HelpToolStripMenuItem

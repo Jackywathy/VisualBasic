@@ -57,7 +57,6 @@ Partial Class AddForm
         '
         'CancelFromRow
         '
-        Me.CancelFromRow.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.CancelFromRow.Location = New System.Drawing.Point(219, 78)
         Me.CancelFromRow.Name = "CancelFromRow"
         Me.CancelFromRow.Size = New System.Drawing.Size(75, 23)
