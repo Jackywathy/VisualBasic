@@ -55,6 +55,8 @@ Partial Class AwardGenerator
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.SaveAsPrompt = New System.Windows.Forms.SaveFileDialog()
         Me.ExportAsPrompt = New System.Windows.Forms.SaveFileDialog()
+        Me.OnlyTXTSave = New System.Windows.Forms.SaveFileDialog()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -129,13 +131,13 @@ Partial Class AwardGenerator
         'AddToolStripMenuItem
         '
         Me.AddToolStripMenuItem.Name = "AddToolStripMenuItem"
-        Me.AddToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.AddToolStripMenuItem.Size = New System.Drawing.Size(123, 22)
         Me.AddToolStripMenuItem.Text = "Add..."
         '
         'RemoveRowToolStripMenuItem
         '
         Me.RemoveRowToolStripMenuItem.Name = "RemoveRowToolStripMenuItem"
-        Me.RemoveRowToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RemoveRowToolStripMenuItem.Size = New System.Drawing.Size(123, 22)
         Me.RemoveRowToolStripMenuItem.Text = "Remove.."
         '
         'HelpToolStripMenuItem
@@ -153,6 +155,7 @@ Partial Class AwardGenerator
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.Label1)
         Me.TabPage1.Controls.Add(Me.Label2)
         Me.TabPage1.Controls.Add(Me.PictureBox1)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
@@ -315,6 +318,19 @@ Partial Class AwardGenerator
         '
         Me.ExportAsPrompt.Filter = "DXF File|*.dxf"
         '
+        'OnlyTXTSave
+        '
+        Me.OnlyTXTSave.Filter = "TXT|*.txt"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(170, 131)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(39, 13)
+        Me.Label1.TabIndex = 2
+        Me.Label1.Text = "Label1"
+        '
         'AwardGenerator
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -371,4 +387,6 @@ Partial Class AwardGenerator
     Friend WithEvents RemoveRowToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents KeyBindingsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents OnlyTXTSave As SaveFileDialog
+    Friend WithEvents Label1 As Label
 End Class

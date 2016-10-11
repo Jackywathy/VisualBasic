@@ -1,15 +1,17 @@
 ﻿Imports System.IO
 Imports System.Reflection
 Public Class AwardGenerator
-    Public TROPHY_LIMITER As List(Of List(Of String))
-    Public PLAQUE_LIMITER As List(Of List(Of String))
+    Public TROPHY_LIMITER As List(Of String)
+    Public PLAQUE_LIMITER As List(Of String)
     Public EXE_PATH As String
     Public FileType As String
     Public FilePath As String
     Public Shared OpenNewName As String = "temp.txt"
     Public Shared ConfigFolder As String = ".settings_awards"
+    Public ReadOnly TempTxtExport As String = "override.txt"
     Public Shared PossibleItems As String() = New String(1) {"SCHOOL_TROPHY", "SCHOOL_PLAQUE"}
     Public Shared DefaultItem As String = "SCHOOL_TROPHY"
+    Public OverRideLocation As String
     Public JustSaved As Boolean
     Friend Enum SaveTypes
         TXT
@@ -29,8 +31,8 @@ Public Class AwardGenerator
     Private Sub ProgramLoad(sender As Object, e As EventArgs) Handles MyBase.Load
         DataTable.DataMember = "AwardTable"
         JustSaved = True
-        PLAQUE_LIMITER = New List(Of List(Of String))
-        TROPHY_LIMITER = New List(Of List(Of String))
+        PLAQUE_LIMITER = New List(Of String)
+        TROPHY_LIMITER = New List(Of String)
         Create_Hidden(ConfigFolder)
         Extract_Exe()
         FileType = SaveTypes.TXT
@@ -343,16 +345,14 @@ Public Class AwardGenerator
             Next
             If TROPHY_LIMITER.Count <> 0 Then
                 txtwriter.WriteLine("{TROPHY_LIMITER}")
-                For Each EachList As List(Of String) In TROPHY_LIMITER
-                    txtwriter.WriteLine(String.Join(" ", EachList.ConvertAll(Function(i As Integer) i.ToString())))
+                For z = 0 To NoSheets - 1
+                    txtwriter.WriteLine(String.Join(" ", TROPHY_LIMITER.ConvertAll(Function(i As Integer) i.ToString())))
                 Next
 
             End If
             If PLAQUE_LIMITER.Count <> 0 Then
                 txtwriter.WriteLine("{PLAQUE_LIMITER}")
-                For Each EachList As List(Of String) In PLAQUE_LIMITER
-                    txtwriter.WriteLine(String.Join(" ", EachList.ConvertAll(Function(i As Integer) i.ToString())))
-                Next
+                txtwriter.WriteLine(String.Join(" ", PLAQUE_LIMITER.ConvertAll(Function(i As Integer) i.ToString())))
             End If
         End Using
     End Sub
@@ -372,9 +372,9 @@ Public Class AwardGenerator
             Else
                 Select Case (CurrentIdentity)
                     Case "P_LIMIT"
-                        PLAQUE_LIMITER.Add(Line.Split(" ").ToList)
+                        PLAQUE_LIMITER = (Line.Split(" ").ToList)
                     Case "T_LIMIT"
-                        TROPHY_LIMITER.Add(Line.Split(" ").ToList)
+                        TROPHY_LIMITER = (Line.Split(" ").ToList)
                     Case "CSV"
                         stringArray.Add(Line)
                 End Select
@@ -419,18 +419,23 @@ Public Class AwardGenerator
     End Sub
 
     ' Save/Load/Export
-    Public Sub SaveAsPromptWrapper()
-        If SaveAsPrompt.ShowDialog = DialogResult.OK Then
-            Select Case SaveAsPrompt.FilterIndex
+    Public Sub SaveAsPromptWrapper(Optional SaveDialogObject As SaveFileDialog = Nothing)
+        If Object.ReferenceEquals(SaveDialogObject, Nothing) Then
+            SaveDialogObject = SaveAsPrompt
+        End If
+        If SaveDialogObject.ShowDialog = DialogResult.OK Then
+            Select Case SaveDialogObject.FilterIndex
                 ' selected txt
                 Case 1
-                    ExportTxt(SaveAsPrompt.FileName)
+                    FileType = SaveTypes.TXT
+                    ExportTxt(SaveDialogObject.FileName)
                 Case 2
+                    FileType = "CSV"
                     ExportCSV(SaveAsPrompt.FileName)
                 Case Else
                     MsgBox("? BAD HAPPENED")
             End Select
-            FilePath = SaveAsPrompt.FileName
+            FilePath = SaveDialogObject.FileName
         End If
     End Sub
 
@@ -493,13 +498,21 @@ Public Class AwardGenerator
 
 
 
-
+    Private NoSheets As Integer
     ' Delimiters
-    Private Sub SetLimiters_Click(sender As Object, e As EventArgs) Handles SetLimiters.Click
-        Dim ThirdForm As New ChooseLimiters(TROPHY_LIMITER, PLAQUE_LIMITER, GetTrophyNumber(), GetPlaqueNumber())
-        If ThirdForm.ShowDialog() = DialogResult.OK Then
-
+    Public Sub SetLimiterWrapper()
+        If FileType <> SaveTypes.TXT Then
+            MessageBox.Show("The item is in CSV format: It will be re-saved to a TXT file")
+            SaveAsPromptWrapper(OnlyTXTSave)
         End If
+            Dim ThirdForm As New ChooseLimiters(TROPHY_LIMITER, PLAQUE_LIMITER, GetTrophyNumber(), GetPlaqueNumber())
+        If ThirdForm.ShowDialog() = DialogResult.OK Then
+            Me.TROPHY_LIMITER = ThirdForm.TROPHY_LIMITER
+            NoSheets = ThirdForm.TrophyNumberSheets
+        End If
+    End Sub
+    Private Sub SetLimiters_Click(sender As Object, e As EventArgs) Handles SetLimiters.Click
+        SetLimiterWrapper()
     End Sub
 
     Public Function GetTrophyNumber() As Integer
@@ -558,14 +571,20 @@ Public Class AwardGenerator
     'Shows FileInfo
     Private Sub FileInfo_Click_(sender As Object, e As EventArgs) Handles FileInfo.Click
         Dim TempFilePath As String
+        Dim TempOverride As String
         If FilePath = String.Empty Then
             TempFilePath = "None"
         Else
             TempFilePath = FilePath
         End If
-        MessageBox.Show("File Path: " & TempFilePath & Environment.NewLine & Environment.NewLine &
-                    "File Type: " & FormatSaveType(FileType) & Environment.NewLine & Environment.NewLine
-                    )
+        If OverRideLocation <> Nothing Then
+            TempOverride = OverRideLocation
+        Else
+            TempOverride = "None"
+        End If
+        MessageBox.Show("File Path: " & TempFilePath & Environment.NewLine &
+                    "File Type: " & FormatSaveType(FileType) & Environment.NewLine &
+                    "Override: " & TempOverride & Environment.NewLine)
     End Sub
 
 

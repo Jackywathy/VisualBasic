@@ -23,28 +23,26 @@ Partial Class ChooseLimiters
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.LimiterTrophy = New System.Windows.Forms.TabControl()
-        Me.TrophyPage = New System.Windows.Forms.TabPage()
+        Me.unchanginglabel2 = New System.Windows.Forms.TabPage()
+        Me.TrophiesPerSheet = New System.Windows.Forms.Label()
+        Me.Unchanginglabel = New System.Windows.Forms.Label()
+        Me.TrophyRowRight4 = New System.Windows.Forms.CheckBox()
+        Me.TrophyRowRight3 = New System.Windows.Forms.CheckBox()
+        Me.TrophyRowRight2 = New System.Windows.Forms.CheckBox()
+        Me.TrophyRowRight1 = New System.Windows.Forms.CheckBox()
+        Me.TrophyRowLeft1 = New System.Windows.Forms.CheckBox()
+        Me.TrophyRowLeft2 = New System.Windows.Forms.CheckBox()
+        Me.TrophyRowLeft3 = New System.Windows.Forms.CheckBox()
+        Me.TrophyRowLeft4 = New System.Windows.Forms.CheckBox()
+        Me.TrophyCol3 = New System.Windows.Forms.CheckBox()
+        Me.TrophyCol2 = New System.Windows.Forms.CheckBox()
+        Me.TrophyCol1 = New System.Windows.Forms.CheckBox()
         Me.SaveToSheet = New System.Windows.Forms.Button()
-        Me.NextSheet = New System.Windows.Forms.Button()
-        Me.SheetDropBox = New System.Windows.Forms.ComboBox()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.NumberSheet = New System.Windows.Forms.Label()
-        Me.TotalSheets = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.label12312 = New System.Windows.Forms.Label()
         Me.NoTrophy = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.CancelButtonTrophy = New System.Windows.Forms.Button()
-        Me.TrophyRowRight1 = New System.Windows.Forms.Button()
-        Me.TrophyRowRight2 = New System.Windows.Forms.Button()
-        Me.TrophyRowRight3 = New System.Windows.Forms.Button()
-        Me.TrophyRowRight4 = New System.Windows.Forms.Button()
-        Me.TrophyRowLeft4 = New System.Windows.Forms.Button()
-        Me.TrophyRowLeft3 = New System.Windows.Forms.Button()
-        Me.TrophyRowLeft2 = New System.Windows.Forms.Button()
-        Me.TrophyRowLeft1 = New System.Windows.Forms.Button()
-        Me.TrophyCol3 = New System.Windows.Forms.Button()
-        Me.TrophyCol2 = New System.Windows.Forms.Button()
-        Me.TrophyCol1 = New System.Windows.Forms.Button()
         Me.Trophy0 = New System.Windows.Forms.CheckBox()
         Me.Trophy1 = New System.Windows.Forms.CheckBox()
         Me.Trophy2 = New System.Windows.Forms.CheckBox()
@@ -58,13 +56,13 @@ Partial Class ChooseLimiters
         Me.TrophyOutline = New System.Windows.Forms.PictureBox()
         Me.PlaquePage = New System.Windows.Forms.TabPage()
         Me.LimiterTrophy.SuspendLayout()
-        Me.TrophyPage.SuspendLayout()
+        Me.unchanginglabel2.SuspendLayout()
         CType(Me.TrophyOutline, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'LimiterTrophy
         '
-        Me.LimiterTrophy.Controls.Add(Me.TrophyPage)
+        Me.LimiterTrophy.Controls.Add(Me.unchanginglabel2)
         Me.LimiterTrophy.Controls.Add(Me.PlaquePage)
         Me.LimiterTrophy.Location = New System.Drawing.Point(36, 12)
         Me.LimiterTrophy.Name = "LimiterTrophy"
@@ -72,109 +70,189 @@ Partial Class ChooseLimiters
         Me.LimiterTrophy.Size = New System.Drawing.Size(622, 489)
         Me.LimiterTrophy.TabIndex = 0
         '
-        'TrophyPage
+        'unchanginglabel2
         '
-        Me.TrophyPage.Controls.Add(Me.SaveToSheet)
-        Me.TrophyPage.Controls.Add(Me.NextSheet)
-        Me.TrophyPage.Controls.Add(Me.SheetDropBox)
-        Me.TrophyPage.Controls.Add(Me.Label2)
-        Me.TrophyPage.Controls.Add(Me.NumberSheet)
-        Me.TrophyPage.Controls.Add(Me.TotalSheets)
-        Me.TrophyPage.Controls.Add(Me.Button1)
-        Me.TrophyPage.Controls.Add(Me.NoTrophy)
-        Me.TrophyPage.Controls.Add(Me.Label1)
-        Me.TrophyPage.Controls.Add(Me.CancelButtonTrophy)
-        Me.TrophyPage.Controls.Add(Me.TrophyRowRight1)
-        Me.TrophyPage.Controls.Add(Me.TrophyRowRight2)
-        Me.TrophyPage.Controls.Add(Me.TrophyRowRight3)
-        Me.TrophyPage.Controls.Add(Me.TrophyRowRight4)
-        Me.TrophyPage.Controls.Add(Me.TrophyRowLeft4)
-        Me.TrophyPage.Controls.Add(Me.TrophyRowLeft3)
-        Me.TrophyPage.Controls.Add(Me.TrophyRowLeft2)
-        Me.TrophyPage.Controls.Add(Me.TrophyRowLeft1)
-        Me.TrophyPage.Controls.Add(Me.TrophyCol3)
-        Me.TrophyPage.Controls.Add(Me.TrophyCol2)
-        Me.TrophyPage.Controls.Add(Me.TrophyCol1)
-        Me.TrophyPage.Controls.Add(Me.Trophy0)
-        Me.TrophyPage.Controls.Add(Me.Trophy1)
-        Me.TrophyPage.Controls.Add(Me.Trophy2)
-        Me.TrophyPage.Controls.Add(Me.Trophy3)
-        Me.TrophyPage.Controls.Add(Me.Trophy4)
-        Me.TrophyPage.Controls.Add(Me.Trophy5)
-        Me.TrophyPage.Controls.Add(Me.Trophy6)
-        Me.TrophyPage.Controls.Add(Me.Trophy7)
-        Me.TrophyPage.Controls.Add(Me.Trophy8)
-        Me.TrophyPage.Controls.Add(Me.Trophy9)
-        Me.TrophyPage.Controls.Add(Me.TrophyOutline)
-        Me.TrophyPage.Location = New System.Drawing.Point(4, 22)
-        Me.TrophyPage.Name = "TrophyPage"
-        Me.TrophyPage.Padding = New System.Windows.Forms.Padding(3)
-        Me.TrophyPage.Size = New System.Drawing.Size(614, 463)
-        Me.TrophyPage.TabIndex = 0
-        Me.TrophyPage.Text = "Trophy"
-        Me.TrophyPage.UseVisualStyleBackColor = True
+        Me.unchanginglabel2.Controls.Add(Me.TrophiesPerSheet)
+        Me.unchanginglabel2.Controls.Add(Me.Unchanginglabel)
+        Me.unchanginglabel2.Controls.Add(Me.TrophyRowRight4)
+        Me.unchanginglabel2.Controls.Add(Me.TrophyRowRight3)
+        Me.unchanginglabel2.Controls.Add(Me.TrophyRowRight2)
+        Me.unchanginglabel2.Controls.Add(Me.TrophyRowRight1)
+        Me.unchanginglabel2.Controls.Add(Me.TrophyRowLeft1)
+        Me.unchanginglabel2.Controls.Add(Me.TrophyRowLeft2)
+        Me.unchanginglabel2.Controls.Add(Me.TrophyRowLeft3)
+        Me.unchanginglabel2.Controls.Add(Me.TrophyRowLeft4)
+        Me.unchanginglabel2.Controls.Add(Me.TrophyCol3)
+        Me.unchanginglabel2.Controls.Add(Me.TrophyCol2)
+        Me.unchanginglabel2.Controls.Add(Me.TrophyCol1)
+        Me.unchanginglabel2.Controls.Add(Me.SaveToSheet)
+        Me.unchanginglabel2.Controls.Add(Me.NumberSheet)
+        Me.unchanginglabel2.Controls.Add(Me.label12312)
+        Me.unchanginglabel2.Controls.Add(Me.NoTrophy)
+        Me.unchanginglabel2.Controls.Add(Me.Label1)
+        Me.unchanginglabel2.Controls.Add(Me.CancelButtonTrophy)
+        Me.unchanginglabel2.Controls.Add(Me.Trophy0)
+        Me.unchanginglabel2.Controls.Add(Me.Trophy1)
+        Me.unchanginglabel2.Controls.Add(Me.Trophy2)
+        Me.unchanginglabel2.Controls.Add(Me.Trophy3)
+        Me.unchanginglabel2.Controls.Add(Me.Trophy4)
+        Me.unchanginglabel2.Controls.Add(Me.Trophy5)
+        Me.unchanginglabel2.Controls.Add(Me.Trophy6)
+        Me.unchanginglabel2.Controls.Add(Me.Trophy7)
+        Me.unchanginglabel2.Controls.Add(Me.Trophy8)
+        Me.unchanginglabel2.Controls.Add(Me.Trophy9)
+        Me.unchanginglabel2.Controls.Add(Me.TrophyOutline)
+        Me.unchanginglabel2.Location = New System.Drawing.Point(4, 22)
+        Me.unchanginglabel2.Name = "unchanginglabel2"
+        Me.unchanginglabel2.Padding = New System.Windows.Forms.Padding(3)
+        Me.unchanginglabel2.Size = New System.Drawing.Size(614, 463)
+        Me.unchanginglabel2.TabIndex = 0
+        Me.unchanginglabel2.Text = "Trophy"
+        Me.unchanginglabel2.UseVisualStyleBackColor = True
+        '
+        'TrophiesPerSheet
+        '
+        Me.TrophiesPerSheet.AutoSize = True
+        Me.TrophiesPerSheet.Location = New System.Drawing.Point(95, 51)
+        Me.TrophiesPerSheet.Name = "TrophiesPerSheet"
+        Me.TrophiesPerSheet.Size = New System.Drawing.Size(131, 13)
+        Me.TrophiesPerSheet.TabIndex = 45
+        Me.TrophiesPerSheet.Text = "REPLACED BY NUMBER"
+        '
+        'Unchanginglabel
+        '
+        Me.Unchanginglabel.AutoSize = True
+        Me.Unchanginglabel.Location = New System.Drawing.Point(12, 51)
+        Me.Unchanginglabel.Name = "Unchanginglabel"
+        Me.Unchanginglabel.Size = New System.Drawing.Size(84, 13)
+        Me.Unchanginglabel.TabIndex = 44
+        Me.Unchanginglabel.Text = "Trophies/Sheet:"
+        '
+        'TrophyRowRight4
+        '
+        Me.TrophyRowRight4.AutoSize = True
+        Me.TrophyRowRight4.Location = New System.Drawing.Point(556, 179)
+        Me.TrophyRowRight4.Name = "TrophyRowRight4"
+        Me.TrophyRowRight4.Size = New System.Drawing.Size(15, 14)
+        Me.TrophyRowRight4.TabIndex = 43
+        Me.TrophyRowRight4.UseVisualStyleBackColor = True
+        '
+        'TrophyRowRight3
+        '
+        Me.TrophyRowRight3.AutoSize = True
+        Me.TrophyRowRight3.Location = New System.Drawing.Point(556, 254)
+        Me.TrophyRowRight3.Name = "TrophyRowRight3"
+        Me.TrophyRowRight3.Size = New System.Drawing.Size(15, 14)
+        Me.TrophyRowRight3.TabIndex = 42
+        Me.TrophyRowRight3.UseVisualStyleBackColor = True
+        '
+        'TrophyRowRight2
+        '
+        Me.TrophyRowRight2.AutoSize = True
+        Me.TrophyRowRight2.Location = New System.Drawing.Point(556, 328)
+        Me.TrophyRowRight2.Name = "TrophyRowRight2"
+        Me.TrophyRowRight2.Size = New System.Drawing.Size(15, 14)
+        Me.TrophyRowRight2.TabIndex = 41
+        Me.TrophyRowRight2.UseVisualStyleBackColor = True
+        '
+        'TrophyRowRight1
+        '
+        Me.TrophyRowRight1.AutoSize = True
+        Me.TrophyRowRight1.Location = New System.Drawing.Point(556, 395)
+        Me.TrophyRowRight1.Name = "TrophyRowRight1"
+        Me.TrophyRowRight1.Size = New System.Drawing.Size(15, 14)
+        Me.TrophyRowRight1.TabIndex = 40
+        Me.TrophyRowRight1.UseVisualStyleBackColor = True
+        '
+        'TrophyRowLeft1
+        '
+        Me.TrophyRowLeft1.AutoSize = True
+        Me.TrophyRowLeft1.Location = New System.Drawing.Point(81, 395)
+        Me.TrophyRowLeft1.Name = "TrophyRowLeft1"
+        Me.TrophyRowLeft1.Size = New System.Drawing.Size(15, 14)
+        Me.TrophyRowLeft1.TabIndex = 39
+        Me.TrophyRowLeft1.UseVisualStyleBackColor = True
+        '
+        'TrophyRowLeft2
+        '
+        Me.TrophyRowLeft2.AutoSize = True
+        Me.TrophyRowLeft2.Location = New System.Drawing.Point(81, 328)
+        Me.TrophyRowLeft2.Name = "TrophyRowLeft2"
+        Me.TrophyRowLeft2.Size = New System.Drawing.Size(15, 14)
+        Me.TrophyRowLeft2.TabIndex = 38
+        Me.TrophyRowLeft2.UseVisualStyleBackColor = True
+        '
+        'TrophyRowLeft3
+        '
+        Me.TrophyRowLeft3.AutoSize = True
+        Me.TrophyRowLeft3.Location = New System.Drawing.Point(81, 254)
+        Me.TrophyRowLeft3.Name = "TrophyRowLeft3"
+        Me.TrophyRowLeft3.Size = New System.Drawing.Size(15, 14)
+        Me.TrophyRowLeft3.TabIndex = 37
+        Me.TrophyRowLeft3.UseVisualStyleBackColor = True
+        '
+        'TrophyRowLeft4
+        '
+        Me.TrophyRowLeft4.AutoSize = True
+        Me.TrophyRowLeft4.Location = New System.Drawing.Point(81, 179)
+        Me.TrophyRowLeft4.Name = "TrophyRowLeft4"
+        Me.TrophyRowLeft4.Size = New System.Drawing.Size(15, 14)
+        Me.TrophyRowLeft4.TabIndex = 36
+        Me.TrophyRowLeft4.UseVisualStyleBackColor = True
+        '
+        'TrophyCol3
+        '
+        Me.TrophyCol3.AutoSize = True
+        Me.TrophyCol3.Location = New System.Drawing.Point(460, 115)
+        Me.TrophyCol3.Name = "TrophyCol3"
+        Me.TrophyCol3.Size = New System.Drawing.Size(15, 14)
+        Me.TrophyCol3.TabIndex = 35
+        Me.TrophyCol3.UseVisualStyleBackColor = True
+        '
+        'TrophyCol2
+        '
+        Me.TrophyCol2.AutoSize = True
+        Me.TrophyCol2.Location = New System.Drawing.Point(328, 115)
+        Me.TrophyCol2.Name = "TrophyCol2"
+        Me.TrophyCol2.Size = New System.Drawing.Size(15, 14)
+        Me.TrophyCol2.TabIndex = 34
+        Me.TrophyCol2.UseVisualStyleBackColor = True
+        '
+        'TrophyCol1
+        '
+        Me.TrophyCol1.AutoSize = True
+        Me.TrophyCol1.Location = New System.Drawing.Point(202, 115)
+        Me.TrophyCol1.Name = "TrophyCol1"
+        Me.TrophyCol1.Size = New System.Drawing.Size(15, 14)
+        Me.TrophyCol1.TabIndex = 33
+        Me.TrophyCol1.UseVisualStyleBackColor = True
         '
         'SaveToSheet
         '
-        Me.SaveToSheet.Location = New System.Drawing.Point(523, 30)
+        Me.SaveToSheet.Location = New System.Drawing.Point(523, 17)
         Me.SaveToSheet.Name = "SaveToSheet"
         Me.SaveToSheet.Size = New System.Drawing.Size(75, 23)
         Me.SaveToSheet.TabIndex = 32
         Me.SaveToSheet.Text = "Save"
         Me.SaveToSheet.UseVisualStyleBackColor = True
         '
-        'NextSheet
-        '
-        Me.NextSheet.Location = New System.Drawing.Point(523, 59)
-        Me.NextSheet.Name = "NextSheet"
-        Me.NextSheet.Size = New System.Drawing.Size(75, 23)
-        Me.NextSheet.TabIndex = 31
-        Me.NextSheet.Text = "Next"
-        Me.NextSheet.UseVisualStyleBackColor = True
-        '
-        'SheetDropBox
-        '
-        Me.SheetDropBox.FormattingEnabled = True
-        Me.SheetDropBox.Location = New System.Drawing.Point(99, 75)
-        Me.SheetDropBox.Name = "SheetDropBox"
-        Me.SheetDropBox.Size = New System.Drawing.Size(119, 21)
-        Me.SheetDropBox.TabIndex = 30
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(18, 78)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(75, 13)
-        Me.Label2.TabIndex = 29
-        Me.Label2.Text = "Current Sheet:"
-        '
         'NumberSheet
         '
         Me.NumberSheet.AutoSize = True
-        Me.NumberSheet.Location = New System.Drawing.Point(95, 50)
+        Me.NumberSheet.Location = New System.Drawing.Point(95, 78)
         Me.NumberSheet.Name = "NumberSheet"
         Me.NumberSheet.Size = New System.Drawing.Size(131, 13)
         Me.NumberSheet.TabIndex = 28
         Me.NumberSheet.Text = "REPLACED BY NUMBER"
         '
-        'TotalSheets
+        'label12312
         '
-        Me.TotalSheets.AutoSize = True
-        Me.TotalSheets.Location = New System.Drawing.Point(18, 50)
-        Me.TotalSheets.Name = "TotalSheets"
-        Me.TotalSheets.Size = New System.Drawing.Size(70, 13)
-        Me.TotalSheets.TabIndex = 27
-        Me.TotalSheets.Text = "Total Sheets:"
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(346, 59)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 26
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.label12312.AutoSize = True
+        Me.label12312.Location = New System.Drawing.Point(19, 78)
+        Me.label12312.Name = "label12312"
+        Me.label12312.Size = New System.Drawing.Size(70, 13)
+        Me.label12312.TabIndex = 27
+        Me.label12312.Text = "Total Sheets:"
         '
         'NoTrophy
         '
@@ -196,111 +274,12 @@ Partial Class ChooseLimiters
         '
         'CancelButtonTrophy
         '
-        Me.CancelButtonTrophy.Location = New System.Drawing.Point(523, 88)
+        Me.CancelButtonTrophy.Location = New System.Drawing.Point(523, 51)
         Me.CancelButtonTrophy.Name = "CancelButtonTrophy"
         Me.CancelButtonTrophy.Size = New System.Drawing.Size(75, 23)
         Me.CancelButtonTrophy.TabIndex = 22
         Me.CancelButtonTrophy.Text = "Exit"
         Me.CancelButtonTrophy.UseVisualStyleBackColor = True
-        '
-        'TrophyRowRight1
-        '
-        Me.TrophyRowRight1.Location = New System.Drawing.Point(548, 395)
-        Me.TrophyRowRight1.Name = "TrophyRowRight1"
-        Me.TrophyRowRight1.Size = New System.Drawing.Size(32, 23)
-        Me.TrophyRowRight1.TabIndex = 21
-        Me.TrophyRowRight1.Text = "<"
-        Me.TrophyRowRight1.UseVisualStyleBackColor = True
-        '
-        'TrophyRowRight2
-        '
-        Me.TrophyRowRight2.Location = New System.Drawing.Point(548, 323)
-        Me.TrophyRowRight2.Name = "TrophyRowRight2"
-        Me.TrophyRowRight2.Size = New System.Drawing.Size(32, 23)
-        Me.TrophyRowRight2.TabIndex = 20
-        Me.TrophyRowRight2.Text = "<"
-        Me.TrophyRowRight2.UseVisualStyleBackColor = True
-        '
-        'TrophyRowRight3
-        '
-        Me.TrophyRowRight3.Location = New System.Drawing.Point(548, 254)
-        Me.TrophyRowRight3.Name = "TrophyRowRight3"
-        Me.TrophyRowRight3.Size = New System.Drawing.Size(32, 23)
-        Me.TrophyRowRight3.TabIndex = 19
-        Me.TrophyRowRight3.Text = "<"
-        Me.TrophyRowRight3.UseVisualStyleBackColor = True
-        '
-        'TrophyRowRight4
-        '
-        Me.TrophyRowRight4.Location = New System.Drawing.Point(548, 170)
-        Me.TrophyRowRight4.Name = "TrophyRowRight4"
-        Me.TrophyRowRight4.Size = New System.Drawing.Size(32, 23)
-        Me.TrophyRowRight4.TabIndex = 18
-        Me.TrophyRowRight4.Text = "<"
-        Me.TrophyRowRight4.UseVisualStyleBackColor = True
-        '
-        'TrophyRowLeft4
-        '
-        Me.TrophyRowLeft4.Location = New System.Drawing.Point(75, 170)
-        Me.TrophyRowLeft4.Name = "TrophyRowLeft4"
-        Me.TrophyRowLeft4.Size = New System.Drawing.Size(32, 23)
-        Me.TrophyRowLeft4.TabIndex = 17
-        Me.TrophyRowLeft4.Text = ">"
-        Me.TrophyRowLeft4.UseVisualStyleBackColor = True
-        '
-        'TrophyRowLeft3
-        '
-        Me.TrophyRowLeft3.Location = New System.Drawing.Point(75, 254)
-        Me.TrophyRowLeft3.Name = "TrophyRowLeft3"
-        Me.TrophyRowLeft3.Size = New System.Drawing.Size(32, 23)
-        Me.TrophyRowLeft3.TabIndex = 16
-        Me.TrophyRowLeft3.Text = ">"
-        Me.TrophyRowLeft3.UseVisualStyleBackColor = True
-        '
-        'TrophyRowLeft2
-        '
-        Me.TrophyRowLeft2.Location = New System.Drawing.Point(75, 323)
-        Me.TrophyRowLeft2.Name = "TrophyRowLeft2"
-        Me.TrophyRowLeft2.Size = New System.Drawing.Size(32, 23)
-        Me.TrophyRowLeft2.TabIndex = 15
-        Me.TrophyRowLeft2.Text = ">"
-        Me.TrophyRowLeft2.UseVisualStyleBackColor = True
-        '
-        'TrophyRowLeft1
-        '
-        Me.TrophyRowLeft1.Location = New System.Drawing.Point(75, 395)
-        Me.TrophyRowLeft1.Name = "TrophyRowLeft1"
-        Me.TrophyRowLeft1.Size = New System.Drawing.Size(32, 23)
-        Me.TrophyRowLeft1.TabIndex = 14
-        Me.TrophyRowLeft1.Text = ">"
-        Me.TrophyRowLeft1.UseVisualStyleBackColor = True
-        '
-        'TrophyCol3
-        '
-        Me.TrophyCol3.Location = New System.Drawing.Point(451, 110)
-        Me.TrophyCol3.Name = "TrophyCol3"
-        Me.TrophyCol3.Size = New System.Drawing.Size(38, 23)
-        Me.TrophyCol3.TabIndex = 13
-        Me.TrophyCol3.Text = "V"
-        Me.TrophyCol3.UseVisualStyleBackColor = True
-        '
-        'TrophyCol2
-        '
-        Me.TrophyCol2.Location = New System.Drawing.Point(319, 110)
-        Me.TrophyCol2.Name = "TrophyCol2"
-        Me.TrophyCol2.Size = New System.Drawing.Size(38, 23)
-        Me.TrophyCol2.TabIndex = 12
-        Me.TrophyCol2.Text = "V"
-        Me.TrophyCol2.UseVisualStyleBackColor = True
-        '
-        'TrophyCol1
-        '
-        Me.TrophyCol1.Location = New System.Drawing.Point(188, 110)
-        Me.TrophyCol1.Name = "TrophyCol1"
-        Me.TrophyCol1.Size = New System.Drawing.Size(38, 23)
-        Me.TrophyCol1.TabIndex = 11
-        Me.TrophyCol1.Text = "V"
-        Me.TrophyCol1.UseVisualStyleBackColor = True
         '
         'Trophy0
         '
@@ -421,20 +400,17 @@ Partial Class ChooseLimiters
         Me.Name = "ChooseLimiters"
         Me.Text = "Choose Limiters"
         Me.LimiterTrophy.ResumeLayout(False)
-        Me.TrophyPage.ResumeLayout(False)
-        Me.TrophyPage.PerformLayout()
+        Me.unchanginglabel2.ResumeLayout(False)
+        Me.unchanginglabel2.PerformLayout()
         CType(Me.TrophyOutline, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents LimiterTrophy As TabControl
-    Friend WithEvents TrophyPage As TabPage
+    Friend WithEvents unchanginglabel2 As TabPage
     Friend WithEvents PlaquePage As TabPage
     Friend WithEvents TrophyOutline As PictureBox
-    Friend WithEvents TrophyCol3 As Button
-    Friend WithEvents TrophyCol2 As Button
-    Friend WithEvents TrophyCol1 As Button
     Friend WithEvents Trophy0 As CheckBox
     Friend WithEvents Trophy1 As CheckBox
     Friend WithEvents Trophy2 As CheckBox
@@ -445,22 +421,23 @@ Partial Class ChooseLimiters
     Friend WithEvents Trophy7 As CheckBox
     Friend WithEvents Trophy8 As CheckBox
     Friend WithEvents Trophy9 As CheckBox
-    Friend WithEvents TrophyRowLeft4 As Button
-    Friend WithEvents TrophyRowLeft3 As Button
-    Friend WithEvents TrophyRowLeft2 As Button
-    Friend WithEvents TrophyRowLeft1 As Button
-    Friend WithEvents TrophyRowRight1 As Button
-    Friend WithEvents TrophyRowRight2 As Button
-    Friend WithEvents TrophyRowRight3 As Button
-    Friend WithEvents TrophyRowRight4 As Button
     Friend WithEvents CancelButtonTrophy As Button
     Friend WithEvents Label1 As Label
     Friend WithEvents NoTrophy As Label
-    Friend WithEvents Button1 As Button
     Friend WithEvents NumberSheet As Label
-    Friend WithEvents TotalSheets As Label
-    Friend WithEvents SheetDropBox As ComboBox
-    Friend WithEvents Label2 As Label
+    Friend WithEvents label12312 As Label
     Friend WithEvents SaveToSheet As Button
-    Friend WithEvents NextSheet As Button
+    Friend WithEvents TrophyCol1 As CheckBox
+    Friend WithEvents TrophyCol2 As CheckBox
+    Friend WithEvents TrophyRowLeft3 As CheckBox
+    Friend WithEvents TrophyRowLeft4 As CheckBox
+    Friend WithEvents TrophyCol3 As CheckBox
+    Friend WithEvents TrophyRowLeft1 As CheckBox
+    Friend WithEvents TrophyRowLeft2 As CheckBox
+    Friend WithEvents TrophyRowRight4 As CheckBox
+    Friend WithEvents TrophyRowRight3 As CheckBox
+    Friend WithEvents TrophyRowRight2 As CheckBox
+    Friend WithEvents TrophyRowRight1 As CheckBox
+    Friend WithEvents TrophiesPerSheet As Label
+    Friend WithEvents Unchanginglabel As Label
 End Class

@@ -1,5 +1,5 @@
 ﻿Public Class ChooseLimiters
-    Sub New(ByVal TROPHY_L As List(Of List(Of String)), ByVal PLAQUE_L As List(Of List(Of String)), ByVal TotalTrophies As Integer, ByVal TotalPlaque As Integer)
+    Sub New(ByVal TROPHY_L As List(Of String), ByVal PLAQUE_L As List(Of String), ByVal TotalTrophies As Integer, ByVal TotalPlaque As Integer)
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
@@ -7,22 +7,23 @@
         PLAQUE_LIMITER = PLAQUE_L
         Me.TotalTrophies = TotalTrophies
         Me.TotalPlaque = TotalPlaque
+        TrophyEnabled = True
+        DoNotChange = False
 
         AddCheckBoxes()
-        FillArrays()
+        LoadFromList(TROPHY_L)
+        UpdateUI()
 
-        AddAllPreviousSheets(1)
-        AddAllPreviousSheets(2)
     End Sub
 
-    Dim TrophyEnabled As Boolean
-    Dim TrophyNumberSheets As Integer
-    Dim PlaqueNumberSheets As Integer
-    Dim TotalTrophies As Integer
-    Dim TotalPlaque As Integer
+    Public TrophyEnabled As Boolean
+    Public TrophyNumberSheets As Integer
+    Public PlaqueNumberSheets As Integer
+    Public TotalTrophies As Integer
+    Public TotalPlaque As Integer
 
-    Dim TROPHY_LIMITER As List(Of List(Of String))
-    Dim PLAQUE_LIMITER As List(Of List(Of String))
+    Public TROPHY_LIMITER As List(Of String)
+    Public PLAQUE_LIMITER As List(Of String)
 
     Private CheckBoxList As List(Of CheckBox)
     Private Columns As List(Of List(Of CheckBox))
@@ -48,18 +49,22 @@
         Next
         Return ret
     End Function
+    Private DoNotChange As Boolean
 
-    Public Sub ProcessCheckBox(IntArray As Integer())
-        If AllChecked(IntArray) = True Or TrophyEnabled = False Then
+    Public Sub ProcessCheckBox(IntArray As Integer(), ByVal sender As CheckBox)
+        If DoNotChange Then
+            DoNotChange = False
+            Exit Sub
+        End If
+        If AllChecked(IntArray) Or TrophyEnabled = False Then
             For Each I As Integer In IntArray
                 CheckBoxList(I).Checked = False
             Next
         Else
-            Dim Before = AddAllPreviousSheets(Integer.Parse(SheetDropBox.Text))
             Dim CurrentCounter = GetCurrentlySelected()
 
             For Each i As Integer In IntArray
-                If Before + CurrentCounter >= TotalTrophies Then
+                If CurrentCounter >= TotalTrophies Then
                     Exit Sub
                 Else
                     If Not CheckBoxList(i).Checked Then
@@ -67,28 +72,9 @@
                         CheckBoxList(i).Checked = True
                     End If
                 End If
-
-
             Next
         End If
     End Sub
-
-    Private Function AddAllPreviousSheets(Upto As Integer) As Integer
-        Dim ret = 0
-        If Upto = 1 Then ' first sheet, no prev sheets
-            Return 0
-        ElseIf Upto < 1 Then
-            MsgBox("WHAT DA HELL? the sheet should not be less than 1....")
-            Close()
-        Else
-            For i = 0 To Upto - 2
-                ret += TROPHY_LIMITER(i).Count
-            Next
-
-        End If
-        Return ret
-    End Function
-
 
     Private Function AllChecked(IntArray As Integer()) As Boolean
         For Each i As Integer In IntArray
@@ -98,159 +84,154 @@
         Next
         Return True
     End Function
+    Private Sub LoadFromList(OfList As List(Of String))
+        For Each che As CheckBox In CheckBoxList
+            che.Checked = False
+        Next
+        For Each str As String In OfList
+            CheckBoxList(Integer.Parse(str)).Checked = True
+        Next
+    End Sub
 
+
+
+    Private CheckTrophyCol1 As List(Of CheckBox)
+    Private CheckTrophyCol2 As List(Of CheckBox)
+    Private CheckTrophyCol3 As List(Of CheckBox)
+
+    Private CheckTrophyRow1 As List(Of CheckBox)
+    Private CheckTrophyRow2 As List(Of CheckBox)
+    Private CheckTrophyRow3 As List(Of CheckBox)
+    Private CheckTrophyRow4 As List(Of CheckBox)
+
+    Private CheckTrophyBack1 As List(Of CheckBox)
+    Private CheckTrophyBack2 As List(Of CheckBox)
+    Private CheckTrophyBack3 As List(Of CheckBox)
+    Private CheckTrophyBack4 As List(Of CheckBox)
+
+    Private MapCheckBox As Dictionary(Of CheckBox, List(Of CheckBox))
     Private Sub AddCheckBoxes()
         CheckBoxList = New List(Of CheckBox)
-        CheckBoxList.Add(Trophy0)
-        CheckBoxList.Add(Trophy1)
-        CheckBoxList.Add(Trophy2)
-        CheckBoxList.Add(Trophy3)
-        CheckBoxList.Add(Trophy4)
-        CheckBoxList.Add(Trophy5)
-        CheckBoxList.Add(Trophy6)
-        CheckBoxList.Add(Trophy7)
-        CheckBoxList.Add(Trophy8)
-        CheckBoxList.Add(Trophy9)
+        CheckTrophyCol1 = New List(Of CheckBox)
+        CheckTrophyCol2 = New List(Of CheckBox)
+        CheckTrophyCol3 = New List(Of CheckBox)
 
+        CheckTrophyRow1 = New List(Of CheckBox)
+        CheckTrophyRow2 = New List(Of CheckBox)
+        CheckTrophyRow3 = New List(Of CheckBox)
+        CheckTrophyRow4 = New List(Of CheckBox)
+
+        CheckTrophyBack1 = New List(Of CheckBox)
+        CheckTrophyBack2 = New List(Of CheckBox)
+        CheckTrophyBack3 = New List(Of CheckBox)
+        CheckTrophyBack4 = New List(Of CheckBox)
+
+        MapCheckBox = New Dictionary(Of CheckBox, List(Of CheckBox))
+
+        CheckBoxList.AddRange(New CheckBox() {Trophy0, Trophy1, Trophy2, Trophy3, Trophy4, Trophy5, Trophy6, Trophy7, Trophy8, Trophy9})
+
+        CheckTrophyCol1.AddRange(New CheckBox() {Trophy3, Trophy2, Trophy1, Trophy0})
+        CheckTrophyCol2.AddRange(New CheckBox() {Trophy7, Trophy6, Trophy5, Trophy4})
+        CheckTrophyCol3.AddRange(New CheckBox() {Trophy9, Trophy8})
+
+        CheckTrophyRow4.AddRange(New CheckBox() {Trophy3, Trophy7})
+        CheckTrophyRow3.AddRange(New CheckBox() {Trophy2, Trophy6})
+        CheckTrophyRow2.AddRange(New CheckBox() {Trophy1, Trophy5})
+        CheckTrophyRow1.AddRange(New CheckBox() {Trophy0, Trophy4})
+
+        CheckTrophyBack4.AddRange(New CheckBox() {Trophy9, Trophy7, Trophy3})
+        CheckTrophyBack3.AddRange(New CheckBox() {Trophy9, Trophy6, Trophy2})
+        CheckTrophyBack2.AddRange(New CheckBox() {Trophy8, Trophy5, Trophy1})
+        CheckTrophyBack1.AddRange(New CheckBox() {Trophy8, Trophy4, Trophy0})
+
+        MapCheckBox.Add(TrophyRowLeft4, CheckTrophyRow4)
+        MapCheckBox.Add(TrophyRowLeft3, CheckTrophyRow3)
+        MapCheckBox.Add(TrophyRowLeft2, CheckTrophyRow2)
+        MapCheckBox.Add(TrophyRowLeft1, CheckTrophyRow1)
+
+        MapCheckBox.Add(TrophyRowRight4, CheckTrophyBack4)
+        MapCheckBox.Add(TrophyRowRight3, CheckTrophyBack3)
+        MapCheckBox.Add(TrophyRowRight2, CheckTrophyBack2)
+        MapCheckBox.Add(TrophyRowRight1, CheckTrophyBack1)
+
+        MapCheckBox.Add(TrophyCol1, CheckTrophyCol1)
+        MapCheckBox.Add(TrophyCol2, CheckTrophyCol2)
+        MapCheckBox.Add(TrophyCol3, CheckTrophyCol3)
     End Sub
 
-    Private Sub TrophyCol3_Click(sender As Object, e As EventArgs) Handles TrophyCol3.Click
-        If Trophy9.Checked And Trophy8.Checked Then
-            Trophy9.Checked = False
-            Trophy8.Checked = False
-        Else
-            Trophy9.Checked = True
-            Trophy8.Checked = True
-        End If
+    Private Sub TrophyCol3_Click(sender As Object, e As EventArgs) Handles TrophyCol3.CheckedChanged
+        ProcessCheckBox(New Integer() {8, 9}, DirectCast(sender, CheckBox))
     End Sub
 
-    Private Sub TrophyCol2_Click(sender As Object, e As EventArgs) Handles TrophyCol2.Click
-        ProcessCheckBox(New Integer() {7, 6, 5, 4})
-
-        'If Trophy4.Checked AndAlso Trophy5.Checked AndAlso Trophy6.Checked AndAlso Trophy7.Checked Then
-        '    Trophy4.Checked = False
-        '    Trophy5.Checked = False
-        '    Trophy6.Checked = False
-        '    Trophy7.Checked = False
-        'Else
-        '    Trophy4.Checked = True
-        '    Trophy5.Checked = True
-        '    Trophy6.Checked = True
-        '    Trophy7.Checked = True
-        'End If
-
-
+    Private Sub TrophyCol2_Click(sender As Object, e As EventArgs) Handles TrophyCol2.CheckedChanged
+        ProcessCheckBox(New Integer() {7, 6, 5, 4}, DirectCast(sender, CheckBox))
     End Sub
 
-    Private Sub TrophyCol1_Click(sender As Object, e As EventArgs) Handles TrophyCol1.Click
-        If Trophy0.Checked And Trophy1.Checked And Trophy2.Checked And Trophy3.Checked Then
-            Trophy0.Checked = False
-            Trophy1.Checked = False
-            Trophy2.Checked = False
-            Trophy3.Checked = False
-        Else
-            Trophy0.Checked = True
-            Trophy1.Checked = True
-            Trophy2.Checked = True
-            Trophy3.Checked = True
-        End If
+    Private Sub TrophyCol1_Click(sender As Object, e As EventArgs) Handles TrophyCol1.CheckedChanged
+        ProcessCheckBox(New Integer() {0, 1, 2, 3}, DirectCast(sender, CheckBox))
     End Sub
 
-    Private Sub TrophyRowLeft4_Click(sender As Object, e As EventArgs) Handles TrophyRowLeft4.Click
-        If Trophy3.Checked And Trophy7.Checked Then
-            Trophy3.Checked = False
-            Trophy7.Checked = False
-        Else
-            Trophy3.Checked = True
-            Trophy7.Checked = True
-        End If
+    Private Sub TrophyRowLeft4_Click(sender As Object, e As EventArgs) Handles TrophyRowLeft4.CheckedChanged
+        ProcessCheckBox(New Integer() {3, 7}, DirectCast(sender, CheckBox))
     End Sub
 
-    Private Sub TrophyRowLeft3_Click(sender As Object, e As EventArgs) Handles TrophyRowLeft3.Click
-        If Trophy2.Checked And Trophy6.Checked Then
-            Trophy2.Checked = False
-            Trophy6.Checked = False
-        Else
-            Trophy2.Checked = True
-            Trophy6.Checked = True
-        End If
+    Private Sub TrophyRowLeft3_Click(sender As Object, e As EventArgs) Handles TrophyRowLeft3.CheckedChanged
+        ProcessCheckBox(New Integer() {2, 6}, DirectCast(sender, CheckBox))
     End Sub
 
-    Private Sub TrophyRowLeft2_Click(sender As Object, e As EventArgs) Handles TrophyRowLeft2.Click
-        If Trophy1.Checked And Trophy5.Checked Then
-            Trophy1.Checked = False
-            Trophy5.Checked = False
-        Else
-            Trophy1.Checked = True
-            Trophy5.Checked = True
-        End If
+    Private Sub TrophyRowLeft2_Click(sender As Object, e As EventArgs) Handles TrophyRowLeft2.CheckedChanged
+        ProcessCheckBox(New Integer() {1, 5}, DirectCast(sender, CheckBox))
     End Sub
 
-    Private Sub TrophyRowLeft1_Click(sender As Object, e As EventArgs) Handles TrophyRowLeft1.Click
-        If Trophy0.Checked And Trophy4.Checked Then
-            Trophy0.Checked = False
-            Trophy4.Checked = False
-        Else
-            Trophy0.Checked = True
-            Trophy4.Checked = True
-        End If
+    Private Sub TrophyRowLeft1_Click(sender As Object, e As EventArgs) Handles TrophyRowLeft1.CheckedChanged
+        ProcessCheckBox(New Integer() {0, 4}, DirectCast(sender, CheckBox))
     End Sub
 
-    Private Sub TrophyRowRight1_Click(sender As Object, e As EventArgs) Handles TrophyRowRight1.Click
-        If Trophy8.Checked And Trophy4.Checked And Trophy0.Checked Then
-            Trophy8.Checked = False
-            Trophy4.Checked = False
-            Trophy0.Checked = False
-        Else
-            Trophy8.Checked = True
-            Trophy4.Checked = True
-            Trophy0.Checked = True
-        End If
+    Private Sub TrophyRowRight1_Click(sender As Object, e As EventArgs) Handles TrophyRowRight1.CheckedChanged
+        ProcessCheckBox(New Integer() {8, 4, 0}, DirectCast(sender, CheckBox))
     End Sub
 
-    Private Sub TrophyRowRight2_Click(sender As Object, e As EventArgs) Handles TrophyRowRight2.Click
-        If Trophy8.Checked And Trophy5.Checked And Trophy1.Checked Then
-            Trophy8.Checked = False
-            Trophy5.Checked = False
-            Trophy1.Checked = False
-        Else
-            Trophy8.Checked = True
-            Trophy5.Checked = True
-            Trophy1.Checked = True
-        End If
+    Private Sub TrophyRowRight2_Click(sender As Object, e As EventArgs) Handles TrophyRowRight2.CheckedChanged
+        ProcessCheckBox(New Integer() {8, 5, 1}, DirectCast(sender, CheckBox))
     End Sub
 
-    Private Sub TrophyRowRight3_Click(sender As Object, e As EventArgs) Handles TrophyRowRight3.Click
-        If Trophy9.Checked And Trophy6.Checked And Trophy2.Checked Then
-            Trophy9.Checked = False
-            Trophy6.Checked = False
-            Trophy2.Checked = False
-        Else
-            Trophy9.Checked = True
-            Trophy6.Checked = True
-            Trophy2.Checked = True
-        End If
+    Private Sub TrophyRowRight3_Click(sender As Object, e As EventArgs) Handles TrophyRowRight3.CheckedChanged
+        ProcessCheckBox(New Integer() {9, 6, 2}, DirectCast(sender, CheckBox))
     End Sub
 
-    Private Sub TrophyRowRight4_Click(sender As Object, e As EventArgs) Handles TrophyRowRight4.Click
-        If Trophy9.Checked And Trophy7.Checked And Trophy3.Checked Then
-            Trophy9.Checked = False
-            Trophy7.Checked = False
-            Trophy3.Checked = False
-        Else
-            Trophy9.Checked = True
-            Trophy7.Checked = True
-            Trophy3.Checked = True
-        End If
+    Private Sub TrophyRowRight4_Click(sender As Object, e As EventArgs) Handles TrophyRowRight4.CheckedChanged
+        ProcessCheckBox(New Integer() {9, 7, 3}, DirectCast(sender, CheckBox))
     End Sub
 
+    Public Function GetCurrentlySelectedOr10() As Integer
+        Dim ret = 0
+        For Each i As CheckBox In CheckBoxList
+            If i.Checked Then
+                ret += 1
+            End If
+        Next
+        Return If(ret <> 0, ret, 10)
+    End Function
+
+    Private Sub UpdateUI()
+
+        Dim currentAlloc = GetCurrentlySelectedOr10()
+
+        NumberSheet.Text = currentAlloc
+        TrophyNumberSheets = Math.Ceiling(TotalTrophies / currentAlloc)
+        TrophiesPerSheet.Text = currentAlloc
+        NumberSheet.Text = TrophyNumberSheets.ToString
+
+    End Sub
 
     Private Sub CancelButton_Click(sender As Object, e As EventArgs) Handles CancelButtonTrophy.Click
+        Me.DialogResult = DialogResult.Cancel
         Close()
     End Sub
 
     Private TrophyCount As Integer
     Private PlaqueCount As Integer
+
     Public Function EnumerateFromZeroToInt(upto As Integer, Optional skip As List(Of Integer) = Nothing) As List(Of String)
         If skip Is Nothing Then
             skip = New List(Of Integer)
@@ -265,105 +246,9 @@
         Return retlist
     End Function
 
-    Private Function GetAllocTrophyCount(Optional Upto As Integer = Nothing)
-        Dim ret = 0
-        If Upto = Nothing Then
-            Upto = TROPHY_LIMITER.Count() - 1
-        End If
-        For i = 0 To Upto
-            ret += TROPHY_LIMITER(i).Count
-        Next
-        Return ret
-    End Function
-
-    Private Sub FillTrophyArray()
-        Dim AccountedTrophies = GetAllocTrophyCount()
-        If AccountedTrophies < TotalTrophies Then
-            While AccountedTrophies < TotalTrophies
-                If (TotalTrophies - AccountedTrophies) < 10 Then
-                    ' almost done!
-                    MsgBox((TotalTrophies - AccountedTrophies).ToString)
-                    TROPHY_LIMITER.Add(EnumerateFromZeroToInt(TotalTrophies - AccountedTrophies - 1))
-                    AccountedTrophies += TotalTrophies - AccountedTrophies
-                Else
-                    TROPHY_LIMITER.Add(EnumerateFromZeroToInt(9))
-                    AccountedTrophies += 10
-                End If
-            End While
-            For Each tl As List(Of String) In TROPHY_LIMITER
-                MsgBox(String.Join("|EachLine|", tl))
-            Next
-            NumberSheet.Text = TROPHY_LIMITER.Count()
-        End If
-    End Sub
-
-    Private Sub FillPlaqueArray()
-
-    End Sub
 
 
-    Public Sub FillArrays()
-        FillTrophyArray()
-        FillPlaqueArray()
-        RefreshTrophyDropBox()
-        RefreshTrophyUI()
-        RefreshPlaqueUI()
-    End Sub
 
-    Private Sub TrophyPage_Click(sender As Object, e As EventArgs) Handles TrophyPage.Click
-
-    End Sub
-
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        FillTrophyArray()
-    End Sub
-
-
-    Public Sub RefreshTrophyDropBox()
-        SheetDropBox.Items.Clear()
-        If TROPHY_LIMITER.Count > 0 Then
-            For i As Integer = 1 To TROPHY_LIMITER.Count
-                SheetDropBox.Items.Add(i.ToString)
-            Next
-        Else
-            MsgBox("no sheets? quitting")
-            Close()
-        End If
-        SheetDropBox.SelectedIndex = 0
-    End Sub
-
-    Private Sub RefreshTrophyUI()
-        Dim currentlist As List(Of String) = TROPHY_LIMITER(Integer.Parse(SheetDropBox.SelectedItem) - 1)
-        For Each check_box As CheckBox In CheckBoxList
-            check_box.Checked = False
-        Next
-        For Each i As String In currentlist
-            CheckBoxList(Integer.Parse(i)).Checked = True
-
-        Next
-
-    End Sub
-    Private Sub RefreshPlaqueUI()
-
-    End Sub
-
-    Private Sub SaveToSheet_Click(sender As Object, e As EventArgs) Handles SaveToSheet.Click
-        SaveToSheetWrapper()
-    End Sub
-    Private Sub SaveToSheetWrapper()
-        TROPHY_LIMITER(Integer.Parse(SheetDropBox.SelectedItem)) = GetSelectedItems()
-        FillArrays()
-    End Sub
-
-    Public Function GetSelectedItems() As List(Of String)
-        Dim retList As New List(Of String)
-        For i As Integer = 0 To 9
-            If CheckBoxList(i).Checked Then
-                retList.Add(i.ToString)
-            End If
-        Next
-        Return retList
-    End Function
 
     Private Sub DisableAll()
         TrophyEnabled = False
@@ -380,17 +265,60 @@
         Next
     End Sub
 
-    Private Sub CheckIfAllFilled()
-        If AddAllPreviousSheets(Integer.Parse(SheetDropBox.SelectedItem)) + 1 + GetCurrentlySelected() > TotalTrophies Then
-            DisableAll()
-        Else
-            EnableAll()
-        End If
-    End Sub
 
     Private Sub TrophyButton_CheckedChanged(sender As Object, e As EventArgs) Handles Trophy0.CheckedChanged, Trophy1.CheckedChanged, Trophy2.CheckedChanged, Trophy3.CheckedChanged,
             Trophy4.CheckedChanged, Trophy5.CheckedChanged, Trophy6.CheckedChanged, Trophy7.CheckedChanged, Trophy8.CheckedChanged, Trophy9.CheckedChanged
         CheckIfAllFilled()
+        UpdateUI()
+    End Sub
+    Private Sub CheckIfAllFilled()
+        If GetCurrentlySelected() >= TotalTrophies Then
+            DisableAll()
+        Else
+            EnableAll()
+        End If
+        checkLineFilled()
 
+    End Sub
+    Public Function AllChecked(ListOf As List(Of CheckBox)) As Boolean
+        For Each I As CheckBox In ListOf
+            If Not I.Checked Then
+                Return False
+            End If
+        Next
+        Return True
+    End Function
+
+
+
+    Private Sub checkLineFilled()
+        For Each Pair As KeyValuePair(Of CheckBox, List(Of CheckBox)) In MapCheckBox
+            If AllChecked(Pair.Value) AndAlso Pair.Key.Checked = False Then
+                DoNotChange = True
+                Pair.Key.Checked = True
+            ElseIf Pair.Key.Checked AndAlso Not AllChecked(Pair.Value) Then
+                DoNotChange = True
+                Pair.Key.Checked = False
+            End If
+        Next
+    End Sub
+
+    Private Sub SaveToSheet_Click(sender As Object, e As EventArgs) Handles SaveToSheet.Click
+        SaveToWrapper
+    End Sub
+    Private Function GetListSelected() As List(Of String)
+        Dim retlist As New List(Of String)
+        For i = 0 To CheckBoxList.Count - 1
+            If CheckBoxList(i).Checked Then
+                retlist.Add(i.ToString)
+            End If
+        Next
+        Return retlist
+    End Function
+    Private Sub SaveToWrapper()
+        Me.TROPHY_LIMITER = GetListSelected()
+        UpdateUI()
+        Me.DialogResult = DialogResult.OK
+        Close()
     End Sub
 End Class
